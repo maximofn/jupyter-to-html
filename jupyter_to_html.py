@@ -1,14 +1,15 @@
 import argparse
 import sys
 import os
-import jupyter_utils as ju
+import utils_jupyter as ju
 import uilts_html as uh
 
 
 def path_name_ext_from_file(file):
     path, name = os.path.split(file)
     name, extension = os.path.splitext(name)
-    return path, name, extension
+    simplex_name = name[11:].replace("-", " ")
+    return path, name, extension, simplex_name
 
 
 def parse_arguments():
@@ -17,7 +18,7 @@ def parse_arguments():
     
     args = parser.parse_args()
     if args.file:
-        path, name, extension = path_name_ext_from_file(args.file)
+        path, name, extension, _ = path_name_ext_from_file(args.file)
         if extension == '.ipynb':
             print(f"Convert {name}{extension} to {name}.html")
         else:
@@ -30,6 +31,7 @@ def parse_arguments():
     return parser.parse_args()
 
 
+
 def main():
     args = parse_arguments()
     
@@ -39,7 +41,8 @@ def main():
     headers = ju.get_headers(cells) # Get the headers
 
     # HTML
-    path, name, extension = path_name_ext_from_file(args.file)
+    _, name, _, simplex_name = path_name_ext_from_file(args.file)
+
     # html = uh.open_html(f"{path}/{name}.html")  # Open the HTML file
     html = uh.open_html(f"_{name}.html")  # Open the HTML file
 
@@ -51,11 +54,13 @@ def main():
     uh.open_div_notebook_container(indentation, html)
     
     indentation += 1
-    indentation = uh.print_index_head(indentation, name.replace("-", " "), html)
+    indentation = uh.print_index_head(indentation, simplex_name, html)
     uh.print_blank_line(html)
-    print(indentation)
 
     indentation = uh.print_index_body(indentation, headers, html)
+    uh.print_blank_line(html)
+
+    indentation = uh.print_content(indentation, cells, html)
     uh.print_blank_line(html)
     
     indentation -= 1

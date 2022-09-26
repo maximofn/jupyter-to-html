@@ -1,3 +1,42 @@
+from cgitb import text
+
+
+def format_text(text):
+    text_clean = text.replace("`", "")
+    # Replace ` character for <code> tag
+    while "`" in text:
+        pos_init = text.find("`")
+        pos_end = text.find("`", pos_init+1)
+        if pos_end == -1:
+            break
+        text = text[:pos_init] + f'<code>{text[pos_init+1:pos_end]}</code>' + text[pos_end+1:]
+    # Replace ** for <b> tag
+    while "**" in text:
+        pos_init = text.find("**")
+        pos_end = text.find("**", pos_init+1)
+        if pos_end == -1:
+            break
+        text = text[:pos_init] + f'<b>{text[pos_init+2:pos_end]}</b>' + text[pos_end+2:]
+    # Replace * character for <em> tag
+    while "*" in text:
+        pos_init = text.find("*")
+        pos_end = text.find("*", pos_init+1)
+        if pos_end == -1:
+            break
+        text = text[:pos_init] + f'<em>{text[pos_init+1:pos_end]}</em>' + text[pos_end+1:]
+    # Replace "* " for <ul> tag
+    while "* " in text:
+        text = text.replace("* ", "<ul><li>", 1)
+        text = text[0:-1] + "</li></ul>" + text[-1]
+    text_formated = text
+    return text_clean, text_formated
+
+def get_level_index(text):
+    level = 0
+    while text[level] == "#":
+        level += 1
+    return level, text[level+1:]
+
 def open_html(filename):
     return open(f"{filename}", 'w')
 
@@ -123,13 +162,13 @@ def print_index_head(indentation, text, file):
     
     return indentation
 
-def print_header(indentation, header_level, text, file):
+def print_header_index(indentation, header_level, text_clean, text_formated, file):
     string = "\n"+("\t"*indentation)+'<!-- Open div header -->'
     file.write(string)
     string = "\n"+("\t"*indentation)+'<div class="cell border-box-sizing text_cell rendered">'
     file.write(string)
     indentation += 1
-    string = "\n"+("\t"*indentation)+'<div class="prompt input_prompt"></div>'
+    string = "\n"+("\t"*indentation)+'<div class="prompt input_prompt">'
     file.write(string)
     indentation += 1
     string = "\n"+("\t"*indentation)+'<div class="inner_cell">'
@@ -138,18 +177,130 @@ def print_header(indentation, header_level, text, file):
     string = "\n"+("\t"*indentation)+'<div class="text_cell_render border-box-sizing rendered_html">'
     file.write(string)
     indentation += 1
-    string = "\n"+("\t"*indentation)+f'<h{header_level} id="{text.replace(" ", "-").replace("`", "")}">{string.replace("`", "<code>")}<a class="anchor-link" href="#{string.replace(" ", "-")}">¶</a></h3>'
+    string = "\n"+("\t"*indentation)+f'<h{header_level} id="{text_clean.replace(" ", "-")}-index">'
+    file.write(string)
+    indentation += 1
+    string = "\n"+("\t"*indentation)+f'<a class="anchor-link" href="#{text_clean.replace(" ", "-")}">'
+    file.write(string)
+    indentation += 1
+    string = "\n"+("\t"*indentation)+f'<p style="margin-left: {(header_level-2)*40}px">'+f'{text_formated}'+'</p>'
+    file.write(string)
+    indentation -= 1
+    string = "\n"+("\t"*indentation)+'</a>'
+    file.write(string)
+    indentation -= 1
+    string = "\n"+("\t"*indentation)+f'</h{header_level}>'
     file.write(string)
     indentation -= 1
     string = "\n"+("\t"*indentation)+'</div>'
     file.write(string)
-    indentation -= 2
+    indentation -= 1
     string = "\n"+("\t"*indentation)+'</div>'
     file.write(string)
     indentation -= 1
     string = "\n"+("\t"*indentation)+'</div>'
+    file.write(string)
+    indentation -= 1
+    string = "\n"+("\t"*indentation)+'</div>'
+    file.write(string)
+    return indentation
+
+def print_header(indentation, header_level, text_clean, text_formated, file):
+    string = "\n"+("\t"*indentation)+'<!-- Open div header -->'
+    file.write(string)
+    string = "\n"+("\t"*indentation)+'<div class="cell border-box-sizing text_cell rendered">'
+    file.write(string)
+    indentation += 1
+    string = "\n"+("\t"*indentation)+'<div class="prompt input_prompt">'
+    file.write(string)
+    indentation += 1
+    string = "\n"+("\t"*indentation)+'<div class="inner_cell">'
+    file.write(string)
+    indentation += 1
+    string = "\n"+("\t"*indentation)+'<div class="text_cell_render border-box-sizing rendered_html">'
+    file.write(string)
+    indentation += 1
+    string = "\n"+("\t"*indentation)+f'<h{header_level} id="{text_clean.replace(" ", "-")}">'
+    file.write(string)
+    indentation += 1
+    string = "\n"+("\t"*indentation)+f'<a class="anchor-link" href="#{text_clean.replace(" ", "-")}">'
+    file.write(string)
+    indentation += 1
+    string = "\n"+("\t"*indentation)+f'<p style="margin-left: {(header_level-2)*40}px">'+f'{text_formated}'+'</p>'
+    file.write(string)
+    indentation -= 1
+    string = "\n"+("\t"*indentation)+'</a>'
+    file.write(string)
+    indentation -= 1
+    string = "\n"+("\t"*indentation)+f'</h{header_level}>'
+    file.write(string)
+    indentation -= 1
+    string = "\n"+("\t"*indentation)+'</div>'
+    file.write(string)
+    indentation -= 1
+    string = "\n"+("\t"*indentation)+'</div>'
+    file.write(string)
+    indentation -= 1
+    string = "\n"+("\t"*indentation)+'</div>'
+    file.write(string)
+    indentation -= 1
+    string = "\n"+("\t"*indentation)+'</div>'
+    file.write(string)
+    return indentation
+
+def print_text(indentation, text, file):
+    string = "\n"+("\t"*indentation)+'<div class="cell border-box-sizing text_cell rendered">'
+    file.write(string)
+    indentation += 1
+    string = "\n"+("\t"*indentation)+'<div class="prompt input_prompt">'
+    file.write(string)
+    indentation += 1
+    string = "\n"+("\t"*indentation)+'<div class="inner_cell">'
+    file.write(string)
+    indentation += 1
+    string = "\n"+("\t"*indentation)+'<div class="text_cell_render border-box-sizing rendered_html">'
+    file.write(string)
+    indentation += 1
+    string = "\n"+("\t"*indentation)+f'<p>{text}'
+    file.write(string)
+    string = "\n"+("\t"*indentation)+'</p>'
+    file.write(string)
+    indentation -= 1
+    string = "\n"+("\t"*indentation)+'</div>'
+    file.write(string)
+    indentation -= 1
+    string = "\n"+("\t"*indentation)+'</div>'
+    file.write(string)
+    indentation -= 1
+    string = "\n"+("\t"*indentation)+'</div>'
+    file.write(string)
+    indentation -= 1
+    string = "\n"+("\t"*indentation)+'</div>'
+    file.write(string)
     return indentation
 
 def print_index_body(indentation, headers, file):
-    indentation = print_header(indentation, 3, 'pandas como `pd`', file)
+    string = "\n"+("\t"*indentation)+'<!-- Index body -->'
+    file.write(string)
+    for header in headers[1:]:
+        level, text = get_level_index(header)
+        text_clean, text_formated = format_text(text)
+        indentation = print_header_index(indentation, level, text_clean, text_formated, file)
+    print_blank_line(file)
+    return indentation
+
+def print_content(indentation, cells, file):
+    string = "\n"+("\t"*indentation)+'<!-- Content -->'
+    file.write(string)
+    for cell in cells:
+        if cell['cell_type'] == 'markdown':
+            if cell['source'][0].startswith('#'):
+                level, text = get_level_index(cell['source'][0])
+                text_clean, text_formated = format_text(text)
+                indentation = print_header(indentation, level, text_clean, text_formated, file)
+            else:
+                for i in range(len(cell['source'])):
+                    _, text_formated = format_text(cell['source'][i])
+                    indentation = print_text(indentation, text_formated, file)
+    print_blank_line(file)
     return indentation
