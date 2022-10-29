@@ -1,33 +1,22 @@
 from cgitb import text
+import re
 
 
 def format_text(text):
-    text_clean = text.replace("`", "")
-    # Replace ` character for <code> tag
-    while "`" in text:
-        pos_init = text.find("`")
-        pos_end = text.find("`", pos_init+1)
-        if pos_end == -1:
-            break
-        text = text[:pos_init] + f'<code>{text[pos_init+1:pos_end]}</code>' + text[pos_end+1:]
+    # text_clean = text.replace("`", "")
+    text_clean = text
+    # Replace link to a image in markdown format to html format
+    text = re.sub(r'\!\[(.*?)\]\((.*?)\)', r'<p align="center"><img src="\2" alt="\1"></p>', text_clean)
+    # Replace `*` for <code>*</code>
+    text = re.sub(r'\`(.+?)\`', r'<code>\1</code>', text)
     # Replace ** for <b> tag
-    while "**" in text:
-        pos_init = text.find("**")
-        pos_end = text.find("**", pos_init+1)
-        if pos_end == -1:
-            break
-        text = text[:pos_init] + f'<b>{text[pos_init+2:pos_end]}</b>' + text[pos_end+2:]
+    text = re.sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', text)
     # Replace * character for <em> tag
-    while "*" in text:
-        pos_init = text.find("*")
-        pos_end = text.find("*", pos_init+1)
-        if pos_end == -1:
-            break
-        text = text[:pos_init] + f'<em>{text[pos_init+1:pos_end]}</em>' + text[pos_end+1:]
+    text = re.sub(r'\*(.+?)\*', r'<em>\1</em>', text)
     # Replace "* " for <ul> tag
-    while "* " in text:
-        text = text.replace("* ", "<ul><li>", 1)
-        text = text[0:-1] + "</li></ul>" + text[-1]
+    text = re.sub(r'\s?\*\s+(.+)', r'<ul><li>\1</li></ul>', text)
+    # Replace "d " for <ol> tag (TODO: fix this)
+    text = re.sub(r'\s?\d\.\s+(.+)', r'<ol><li>\1</li></ol>', text)
     text_formated = text
     return text_clean, text_formated
 
@@ -282,17 +271,26 @@ def print_text(indentation, text, file):
 def print_index_body(indentation, headers, file):
     string = "\n"+("\t"*indentation)+'<!-- Index body -->'
     file.write(string)
+    string = "\n"+("\t"*indentation)+'<div>'
+    file.write(string)
+    indentation += 1
     for header in headers[1:]:
         level, text = get_level_index(header)
         text_clean, text_formated = format_text(text)
         indentation = print_header_index(indentation, level, text_clean, text_formated, file)
+    indentation -= 1
+    string = "\n"+("\t"*indentation)+'</div>'
+    file.write(string)
     print_blank_line(file)
     return indentation
 
 def print_content(indentation, cells, file):
     string = "\n"+("\t"*indentation)+'<!-- Content -->'
     file.write(string)
-    for cell in cells:
+    string = "\n"+("\t"*indentation)+'<div>'
+    file.write(string)
+    indentation += 1
+    for c, cell in enumerate(cells):
         if cell['cell_type'] == 'markdown':
             if cell['source'][0].startswith('#'):
                 level, text = get_level_index(cell['source'][0])
@@ -302,5 +300,8 @@ def print_content(indentation, cells, file):
                 for i in range(len(cell['source'])):
                     _, text_formated = format_text(cell['source'][i])
                     indentation = print_text(indentation, text_formated, file)
+    indentation -= 1
+    string = "\n"+("\t"*indentation)+'</div>'
+    file.write(string)
     print_blank_line(file)
     return indentation

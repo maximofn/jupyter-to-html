@@ -1,7 +1,10 @@
+#!/usr/bin/env python3
+
 import argparse
+import re
 import sys
 import os
-import utils_jupyter as ju
+import utils_jupyter as uj
 import uilts_html as uh
 
 
@@ -35,34 +38,41 @@ def parse_arguments():
 def main():
     args = parse_arguments()
     
-    # Notebook
-    notebook = ju.open_notebook(args.file)  # Open the notebook as a dictionary
+    # Open notebook and get cells and headers
+    notebook = uj.open_notebook(args.file)  # Open the notebook as a dictionary
     cells = notebook['cells']   # Get only with the cells
-    headers = ju.get_headers(cells) # Get the headers
+    headers = uj.get_headers(cells) # Get the headers
 
-    # HTML
+    # Get name and simple name of the notebook
     _, name, _, simplex_name = path_name_ext_from_file(args.file)
 
-    # html = uh.open_html(f"{path}/{name}.html")  # Open the HTML file
-    html = uh.open_html(f"_{name}.html")  # Open the HTML file
+    # Create the HTML file
+    # html = uh.open_html(f"{path}/{name}.html")
+    html = uh.open_html(f"_{name}.html")
 
+    # Add the first part of the HTML file
     uh.first_paragraph(html)    # Write the first paragraph
     
+    # Add the first two divs
     indentation = 0
     uh.open_div_notebook(indentation, html)
     indentation += 1
     uh.open_div_notebook_container(indentation, html)
     
+    # Add the index head
     indentation += 1
     indentation = uh.print_index_head(indentation, simplex_name, html)
     uh.print_blank_line(html)
 
+    # Add the index body
     indentation = uh.print_index_body(indentation, headers, html)
     uh.print_blank_line(html)
 
+    # Add the content of the notebook
     indentation = uh.print_content(indentation, cells, html)
     uh.print_blank_line(html)
     
+    # Close the two first divs
     indentation -= 1
     uh.close_div_notebook_container(indentation, html)
     indentation -= 1
