@@ -415,7 +415,7 @@ def print_text(indentation, text, file, margin_left=0):
     file.write(string)
     return indentation
 
-def print_code(indentation, code, output, file):
+def print_code(indentation, code, output, file, display_data=False):
     ###
     # This function print code of the notebook
     # Input:
@@ -434,14 +434,14 @@ def print_code(indentation, code, output, file):
     indentation += 1
     string = "\n"+("\t"*indentation)+'<div class="prompt input_prompt">Code:</div>'
     file.write(string)
-    indentation += 1
+    # indentation += 1
     string = "\n"+("\t"*indentation)+'<div class="inner_cell">'
     file.write(string)
     indentation += 1
     string = "\n"+("\t"*indentation)+'<div class="input_area">'
     file.write(string)
     indentation += 1
-    string = "\n"+("\t"*indentation)+'<div class=" highlight hl-python">'
+    string = "\n"+("\t"*indentation)+'<div class=" highlight hl-python3">'
     file.write(string)
     indentation += 1
     string = "\n"+("\t"*indentation)+'<pre>'
@@ -478,32 +478,37 @@ def print_code(indentation, code, output, file):
     string = "\n"+("\t"*indentation)+'<div class="prompt output_prompt">Out:</div>'
     file.write(string)
     # indentation += 1
-    string = "\n"+("\t"*indentation)+'<div class="output_text output_subarea output_execute_result">'
-    file.write(string)
-    indentation += 1
-    string = "\n"+("\t"*indentation)+'<pre>'
-    file.write(string)
-    indentation += 1
-    for line in output:
-        string = "\n"+("\t"*indentation)
-        print(f"line: {line}", type(line), line.keys())
-        print(f"text: {line['text']}", type(line['text']))
-        for subline in line['text']:
-            print(f"subline: {subline}", type(subline))
-            for word in subline.split(" "):
-                word = word.replace("\n", "")
-                string = string+word
+    if display_data == False:
+        string = "\n"+("\t"*indentation)+'<div class="output_text output_subarea output_execute_result">'
         file.write(string)
-    indentation -= 1
-    string = "\n"+("\t"*indentation)+'</pre>'
-    file.write(string)
-    indentation -= 1
-    string = "\n"+("\t"*indentation)+'</div>'
-    file.write(string)
-    indentation -= 1
-    string = "\n"+("\t"*indentation)+'</div>'
-    file.write(string)
-    indentation -= 1
+        indentation += 1
+        string = "\n"+("\t"*indentation)+'<pre>'
+        file.write(string)
+        indentation += 1
+        for line in output:
+            line = line.replace("\n", "")
+            string = "\n"+("\t"*indentation)+line
+            file.write(string)
+        indentation -= 1
+        string = "\n"+("\t"*indentation)+'</pre>'
+        file.write(string)
+        indentation -= 1
+        string = "\n"+("\t"*indentation)+'</div>'
+        file.write(string)
+        indentation -= 1
+    else:
+        string = "\n"+("\t"*indentation)+'<div class="output_area">'
+        file.write(string)
+        indentation += 1
+        string = "\n"+("\t"*indentation)+'<div class="prompt"></div>'
+        file.write(string)
+        # indentation += 1
+        string = "\n"+("\t"*indentation)+f'<div class="output_png output_subarea "><img src="data:image/png;base64,{output}" /></div>'
+        file.write(string)
+        indentation -= 1
+        string = "\n"+("\t"*indentation)+'</div>'
+        file.write(string)
+        indentation -= 1
     string = "\n"+("\t"*indentation)+'</div>'
     file.write(string)
     indentation -= 1
@@ -513,7 +518,6 @@ def print_code(indentation, code, output, file):
     string = "\n"+("\t"*indentation)+'</div>'
     file.write(string)
     return indentation
-
 
 def print_index_body(indentation, headers, file):
     ###
@@ -573,9 +577,22 @@ def print_content(indentation, cells, file):
                         margin_left = 0
                     indentation = print_text(indentation, text_formated, file, margin_left)
         elif cell['cell_type'] == 'code':
-            print(cell['source'])
-            print(cell['outputs'])
-            indentation = print_code(indentation, cell['source'], cell['outputs'], file)
+            if len(cell['outputs']) == 0:
+                indentation = print_code(indentation, cell['source'], [], file)
+            else:
+                if cell['outputs'][0]['output_type'] == 'stream':
+                    indentation = print_code(indentation, cell['source'], cell['outputs'][0]['text'], file)
+                elif cell['outputs'][0]['output_type'] == 'display_data':
+                    indentation = print_code(indentation, cell['source'], cell['outputs'][0]['data']['image/png'], file, display_data=True)
+                elif cell['outputs'][0]['output_type'] == 'execute_result':
+                    indentation = print_code(indentation, cell['source'], cell['outputs'][0]['data']['text/plain'], file)
+                elif cell['outputs'][0]['output_type'] == 'error':
+                    print(f"cell_type code - output_type error at cell {c}")
+                    print(cell['outputs'][0].keys())
+                    print(cell['outputs'][0]['ename'])
+                    print(cell['outputs'][0]['evalue'])
+                    print(cell['outputs'][0]['traceback'])
+                    break
     indentation -= 1
     string = "\n"+("\t"*indentation)+'</div>'
     file.write(string)
