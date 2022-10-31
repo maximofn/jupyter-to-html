@@ -1127,204 +1127,27 @@
 			<div class="cell border-box-sizing code_cell rendered">
 				<div class="input">
 					<div class="prompt input_prompt">Code:</div>
-						<div class="inner_cell">
-							<div class="input_area">
-								<div class=" highlight hl-python">
-									<pre>
-										<span class="n">import</span> <span class="n">pandas</span> <span class="n">as</span> <span class="n">pd</span> 
-										<span class="n"></span> 
-										<span class="n">print(pd.__version__)</span> 
-									</pre>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="output_wrapper">
-						<div class="output">
-							<div class="prompt output_prompt">Out:</div>
-							<div class="output_text output_subarea output_execute_result">
+					<div class="inner_cell">
+						<div class="input_area">
+							<div class=" highlight hl-python3">
 								<pre>
-									1.1.5
+									<span class="n">import</span> <span class="n">pandas</span> <span class="n">as</span> <span class="n">pd</span> 
+									<span class="n"></span> 
+									<span class="n">print(pd.__version__)</span> 
 								</pre>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<!-- Open div header -->
-			<div class="cell border-box-sizing text_cell rendered">
-				<div class="prompt input_prompt">
-					<div class="inner_cell">
-						<div class="text_cell_render border-box-sizing rendered_html">
-							<h2 id="3.-Estructuras-de-datos-de-Pandas">
-								<a class="anchor-link" href="#3.-Estructuras-de-datos-de-Pandas">
-									<p style="margin-left: 10px">3. Estructuras de datos de Pandas</p>
-								</a>
-							</h2>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="cell border-box-sizing text_cell rendered">
-				<div class="prompt input_prompt">
-					<div class="inner_cell">
-						<div class="text_cell_render border-box-sizing rendered_html">
-							<p style="margin-left: 0px">En Pandas existen dos tipos de estructuras de datos: las <code><b>Serie</b></code>s y los <code><b>DataFrame</b></code>s
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- Open div header -->
-			<div class="cell border-box-sizing text_cell rendered">
-				<div class="prompt input_prompt">
-					<div class="inner_cell">
-						<div class="text_cell_render border-box-sizing rendered_html">
-							<h3 id="3.1.-Series">
-								<a class="anchor-link" href="#3.1.-Series">
-									<p style="margin-left: 20px">3.1. Series</p>
-								</a>
-							</h3>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="cell border-box-sizing text_cell rendered">
-				<div class="prompt input_prompt">
-					<div class="inner_cell">
-						<div class="text_cell_render border-box-sizing rendered_html">
-							<p style="margin-left: 0px">El tipo de dato <code><b>Serie</b></code> es una matriz etiquetada unidimensional capaz de contener cualquier tipo de datos (enteros, cadenas, números de punto flotante, objetos Python, etc.). Están divididas en índices.
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="cell border-box-sizing text_cell rendered">
-				<div class="prompt input_prompt">
-					<div class="inner_cell">
-						<div class="text_cell_render border-box-sizing rendered_html">
-							<p style="margin-left: 0px">Para crear un tipo de dato <code><b>Serie</b></code> la forma más común es
-
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="cell border-box-sizing text_cell rendered">
-				<div class="prompt input_prompt">
-					<div class="inner_cell">
-						<div class="text_cell_render border-box-sizing rendered_html">
-							<p style="margin-left: 0px">
-
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="cell border-box-sizing text_cell rendered">
-				<div class="prompt input_prompt">
-					<div class="inner_cell">
-						<div class="text_cell_render border-box-sizing rendered_html">
-							<p style="margin-left: 80px">
-<code>
-serie = pd.Series(data, index=index)
-<br></code>
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="cell border-box-sizing text_cell rendered">
-				<div class="prompt input_prompt">
-					<div class="inner_cell">
-						<div class="text_cell_render border-box-sizing rendered_html">
-							<p style="margin-left: 0px">
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="cell border-box-sizing text_cell rendered">
-				<div class="prompt input_prompt">
-					<div class="inner_cell">
-						<div class="text_cell_render border-box-sizing rendered_html">
-							<p style="margin-left: 0px">
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="cell border-box-sizing text_cell rendered">
-				<div class="prompt input_prompt">
-					<div class="inner_cell">
-						<div class="text_cell_render border-box-sizing rendered_html">
-							<p style="margin-left: 0px">
-
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="cell border-box-sizing text_cell rendered">
-				<div class="prompt input_prompt">
-					<div class="inner_cell">
-						<div class="text_cell_render border-box-sizing rendered_html">
-							<p style="margin-left: 0px">Donde <code><b>data</b></code> puede ser
-
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="cell border-box-sizing text_cell rendered">
-				<div class="prompt input_prompt">
-					<div class="inner_cell">
-						<div class="text_cell_render border-box-sizing rendered_html">
-							<p style="margin-left: 0px"><ul><li>Un diccionario</li></ul>
-
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="cell border-box-sizing text_cell rendered">
-				<div class="prompt input_prompt">
-					<div class="inner_cell">
-						<div class="text_cell_render border-box-sizing rendered_html">
-							<p style="margin-left: 0px"><ul><li>Una lista o tupla</li></ul>
-
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="cell border-box-sizing text_cell rendered">
-				<div class="prompt input_prompt">
-					<div class="inner_cell">
-						<div class="text_cell_render border-box-sizing rendered_html">
-							<p style="margin-left: 0px"><ul><li>Un ndarray de Numpy</li></ul>
-
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="cell border-box-sizing text_cell rendered">
-				<div class="prompt input_prompt">
-					<div class="inner_cell">
-						<div class="text_cell_render border-box-sizing rendered_html">
-							<p style="margin-left: 0px"><ul><li>Un valor escalar</li></ul>
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="cell border-box-sizing text_cell rendered">
-				<div class="prompt input_prompt">
-					<div class="inner_cell">
-						<div class="text_cell_render border-box-sizing rendered_html">
-							<p style="margin-left: 0px">Como uno de los tipos de datos puede ser un ndarray de Numpy, importamos Numpy para poder usarlo
-							</p>
+				<div class="output_wrapper">
+					<div class="output">
+						<div class="prompt output_prompt">Out:</div>
+						<div class="output_text output_subarea output_execute_result">
+							<pre>
+								1.1.5
+								1.1.6
+								1.1.7
+							</pre>
 						</div>
 					</div>
 				</div>
@@ -1332,59 +1155,37 @@ serie = pd.Series(data, index=index)
 			<div class="cell border-box-sizing code_cell rendered">
 				<div class="input">
 					<div class="prompt input_prompt">Code:</div>
-						<div class="inner_cell">
-							<div class="input_area">
-								<div class=" highlight hl-python">
-									<pre>
-										<span class="n">import</span> <span class="n">numpy</span> <span class="n">as</span> <span class="n">np</span> 
-									</pre>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="output_wrapper">
-						<div class="output">
-							<div class="prompt output_prompt">Out:</div>
-							<div class="output_text output_subarea output_execute_result">
+					<div class="inner_cell">
+						<div class="input_area">
+							<div class=" highlight hl-python3">
 								<pre>
+									<span class="n">dhasjk</span> 
 								</pre>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<!-- Open div header -->
-			<div class="cell border-box-sizing text_cell rendered">
-				<div class="prompt input_prompt">
-					<div class="inner_cell">
-						<div class="text_cell_render border-box-sizing rendered_html">
-							<h4 id="3.1.1.-Series-desde-un-diccionario">
-								<a class="anchor-link" href="#3.1.1.-Series-desde-un-diccionario">
-									<p style="margin-left: 30px">3.1.1. Series desde un diccionario</p>
-								</a>
-							</h4>
+				<div class="output_wrapper">
+					<div class="output">
+						<div class="prompt output_prompt">Out:</div>
+						<div class="output_subarea output_text output_error">
+							<pre>
+								<span style="color:red">---------------------------------------------------------------------------</span>
+								<span style="color:red">NameError</span>                                 Traceback (most recent call last)
+								<span style="color:green"><ipython-input-1-89afc2e15fcd></span> in <span style="color:cyan"><module>[0;34m</span>
+<span style="color:green">----> 1<span style="color:red"> </span>dhasjk</span><span style="color:blue">[0m[0;34m</span>[0m
+[0m
+								<span style="color:red">NameError</span>: name 'dhasjk' is not defined
+							</pre>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="cell border-box-sizing code_cell rendered">
-				<div class="input">
-					<div class="prompt input_prompt">Code:</div>
-						<div class="inner_cell">
-							<div class="input_area">
-								<div class=" highlight hl-python">
-									<pre>
-										<span class="n">diccionario</span> <span class="n">=</span> <span class="n">{"b":</span> <span class="n">1,</span> <span class="n">"a":</span> <span class="n">0,</span> <span class="n">"c":</span> <span class="n">2}</span> 
-										<span class="n"></span> 
-										<span class="n">serie</span> <span class="n">=</span> <span class="n">pd.Series(diccionario)</span> 
-										<span class="n">serie</span> 
-									</pre>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="output_wrapper">
-						<div class="output">
-							<div class="prompt output_prompt">Out:</div>
-							<div class="output_text output_subarea output_execute_result">
-								<pre>
+		</div>
+	</div>
+
+
+<!-- Close div notebook container -->
+</div>
+<!-- Close div notebook -->
+</div>

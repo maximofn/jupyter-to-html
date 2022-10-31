@@ -59,6 +59,143 @@ def format_text(text):
     text_formated = text
     return text_clean, text_formated
 
+def format_error_text(list_text):
+    ###
+    # This function format the error text
+    # Input:
+    #   list_text: list
+    # Output:
+    #   list_text: list
+    ###
+    for i, text in enumerate(list_text):
+        # Replace \x1b[0;30mtext\x1b\[0m for <span style="color:black">text</span>
+        text = re.sub(r'\x1b\[0;30m(.+?)\x1b\[0m', r'<span style="color:black">\1</span>', text)
+        # Replace \x1b[0;31mtext\x1b\[0m for <span style="color:red">text</span>
+        text = re.sub(r'\x1b\[0;31m(.+?)\x1b\[0m', r'<span style="color:red">\1</span>', text)
+        # Replace \x1b[0;32mtext\x1b\[0m for <span style="color:green">text</span>
+        text = re.sub(r'\x1b\[0;32m(.+?)\x1b\[0m', r'<span style="color:green">\1</span>', text)
+        # Replace \x1b[0;33mtext\x1b\[0m for <span style="color:yellow">text</span>
+        text = re.sub(r'\x1b\[0;33m(.+?)\x1b\[0m', r'<span style="color:yellow">\1</span>', text)
+        # Replace \x1b[0;34mtext\x1b\[0m for <span style="color:blue">text</span>
+        text = re.sub(r'\x1b\[0;34m(.+?)\x1b\[0m', r'<span style="color:blue">\1</span>', text)
+        # Replace \x1b[0;35mtext\x1b\[0m for <span style="color:magenta">text</span>
+        text = re.sub(r'\x1b\[0;35m(.+?)\x1b\[0m', r'<span style="color:magenta">\1</span>', text)
+        # Replace \x1b[0;36mtext\x1b\[0m for <span style="color:cyan">text</span>
+        text = re.sub(r'\x1b\[0;36m(.+?)\x1b\[0m', r'<span style="color:cyan">\1</span>', text)
+        # Replace \x1b[0;37mtext\x1b\[0m for <span style="color:white">text</span>
+        text = re.sub(r'\x1b\[0;37m(.+?)\x1b\[0m', r'<span style="color:white">\1</span>', text)
+
+        # Replace \x1b[1;30mtext\x1b\[0m for <span style="color:black"><b>text</b></span>
+        text = re.sub(r'\x1b\[1;30m(.+?)\x1b\[0m', r'<span style="color:black"><b>\1</b></span>', text)
+        # Replace \x1b[1;31mtext\x1b\[0m for <span style="color:red"><b>text</b></span>
+        text = re.sub(r'\x1b\[1;31m(.+?)\x1b\[0m', r'<span style="color:red"><b>\1</b></span>', text)
+        # Replace \x1b[1;32mtext\x1b\[0m for <span style="color:green"><b>text</b></span>
+        text = re.sub(r'\x1b\[1;32m(.+?)\x1b\[0m', r'<span style="color:green"><b>\1</b></span>', text)
+        # Replace \x1b[1;33mtext\x1b\[0m for <span style="color:yellow"><b>text</b></span>
+        text = re.sub(r'\x1b\[1;33m(.+?)\x1b\[0m', r'<span style="color:yellow"><b>\1</b></span>', text)
+        # Replace \x1b[1;34mtext\x1b\[0m for <span style="color:blue"><b>text</b></span>
+        text = re.sub(r'\x1b\[1;34m(.+?)\x1b\[0m', r'<span style="color:blue"><b>\1</b></span>', text)
+        # Replace \x1b[1;35mtext\x1b\[0m for <span style="color:magenta"><b>text</b></span>
+        text = re.sub(r'\x1b\[1;35m(.+?)\x1b\[0m', r'<span style="color:magenta"><b>\1</b></span>', text)
+        # Replace \x1b[1;36mtext\x1b\[0m for <span style="color:cyan"><b>text</b></span>
+        text = re.sub(r'\x1b\[1;36m(.+?)\x1b\[0m', r'<span style="color:cyan"><b>\1</b></span>', text)
+        # Replace \x1b[1;37mtext\x1b\[0m for <span style="color:white"><b>text</b></span>
+        text = re.sub(r'\x1b\[1;37m(.+?)\x1b\[0m', r'<span style="color:white"><b>\1</b></span>', text)
+
+        # Replace \x1b[4;30mtext\x1b\[0m for <span style="color:black"><u>text</u></span>
+        text = re.sub(r'\x1b\[4;30m(.+?)\x1b\[0m', r'<span style="color:black"><u>\1</u></span>', text)
+        # Replace \x1b[4;31mtext\x1b\[0m for <span style="color:red"><u>text</u></span>
+        text = re.sub(r'\x1b\[4;31m(.+?)\x1b\[0m', r'<span style="color:red"><u>\1</u></span>', text)
+        # Replace \x1b[4;32mtext\x1b\[0m for <span style="color:green"><u>text</u></span>
+        text = re.sub(r'\x1b\[4;32m(.+?)\x1b\[0m', r'<span style="color:green"><u>\1</u></span>', text)
+        # Replace \x1b[4;33mtext\x1b\[0m for <span style="color:yellow"><u>text</u></span>
+        text = re.sub(r'\x1b\[4;33m(.+?)\x1b\[0m', r'<span style="color:yellow"><u>\1</u></span>', text)
+        # Replace \x1b[4;34mtext\x1b\[0m for <span style="color:blue"><u>text</u></span>
+        text = re.sub(r'\x1b\[4;34m(.+?)\x1b\[0m', r'<span style="color:blue"><u>\1</u></span>', text)
+        # Replace \x1b[4;35mtext\x1b\[0m for <span style="color:magenta"><u>text</u></span>
+        text = re.sub(r'\x1b\[4;35m(.+?)\x1b\[0m', r'<span style="color:magenta"><u>\1</u></span>', text)
+        # Replace \x1b[4;36mtext\x1b\[0m for <span style="color:cyan"><u>text</u></span>
+        text = re.sub(r'\x1b\[4;36m(.+?)\x1b\[0m', r'<span style="color:cyan"><u>\1</u></span>', text)
+        # Replace \x1b[4;37mtext\x1b\[0m for <span style="color:white"><u>text</u></span>
+        text = re.sub(r'\x1b\[4;37m(.+?)\x1b\[0m', r'<span style="color:white"><u>\1</u></span>', text)
+
+        # Replace \x1b[40mtext\x1b\[0m for <span style="background-color:black">text</span>
+        text = re.sub(r'\x1b\[40m(.+?)\x1b\[0m', r'<span style="background-color:black">\1</span>', text)
+        # Replace \x1b[41mtext\x1b\[0m for <span style="background-color:red">text</span>
+        text = re.sub(r'\x1b\[41m(.+?)\x1b\[0m', r'<span style="background-color:red">\1</span>', text)
+        # Replace \x1b[42mtext\x1b\[0m for <span style="background-color:green">text</span>
+        text = re.sub(r'\x1b\[42m(.+?)\x1b\[0m', r'<span style="background-color:green">\1</span>', text)
+        # Replace \x1b[43mtext\x1b\[0m for <span style="background-color:yellow">text</span>
+        text = re.sub(r'\x1b\[43m(.+?)\x1b\[0m', r'<span style="background-color:yellow">\1</span>', text)
+        # Replace \x1b[44mtext\x1b\[0m for <span style="background-color:blue">text</span>
+        text = re.sub(r'\x1b\[44m(.+?)\x1b\[0m', r'<span style="background-color:blue">\1</span>', text)
+        # Replace \x1b[45mtext\x1b\[0m for <span style="background-color:magenta">text</span>
+        text = re.sub(r'\x1b\[45m(.+?)\x1b\[0m', r'<span style="background-color:magenta">\1</span>', text)
+        # Replace \x1b[46mtext\x1b\[0m for <span style="background-color:cyan">text</span>
+        text = re.sub(r'\x1b\[46m(.+?)\x1b\[0m', r'<span style="background-color:cyan">\1</span>', text)
+        # Replace \x1b[47mtext\x1b\[0m for <span style="background-color:white">text</span>
+        text = re.sub(r'\x1b\[47m(.+?)\x1b\[0m', r'<span style="background-color:white">\1</span>', text)
+
+        # Replace \x1b[0;90mtext\x1b\[0m for <span style="color:grey">text</span>
+        text = re.sub(r'\x1b\[0;90m(.+?)\x1b\[0m', r'<span style="color:grey">\1</span>', text)
+        # Replace \x1b[0;91mtext\x1b\[0m for <span style="color:red">text</span>
+        text = re.sub(r'\x1b\[0;91m(.+?)\x1b\[0m', r'<span style="color:red">\1</span>', text)
+        # Replace \x1b[0;92mtext\x1b\[0m for <span style="color:green">text</span>
+        text = re.sub(r'\x1b\[0;92m(.+?)\x1b\[0m', r'<span style="color:green">\1</span>', text)
+        # Replace \x1b[0;93mtext\x1b\[0m for <span style="color:yellow">text</span>
+        text = re.sub(r'\x1b\[0;93m(.+?)\x1b\[0m', r'<span style="color:yellow">\1</span>', text)
+        # Replace \x1b[0;94mtext\x1b\[0m for <span style="color:blue">text</span>
+        text = re.sub(r'\x1b\[0;94m(.+?)\x1b\[0m', r'<span style="color:blue">\1</span>', text)
+        # Replace \x1b[0;95mtext\x1b\[0m for <span style="color:magenta">text</span>
+        text = re.sub(r'\x1b\[0;95m(.+?)\x1b\[0m', r'<span style="color:magenta">\1</span>', text)
+        # Replace \x1b[0;96mtext\x1b\[0m for <span style="color:cyan">text</span>
+        text = re.sub(r'\x1b\[0;96m(.+?)\x1b\[0m', r'<span style="color:cyan">\1</span>', text)
+        # Replace \x1b[0;97mtext\x1b\[0m for <span style="color:white">text</span>
+        text = re.sub(r'\x1b\[0;97m(.+?)\x1b\[0m', r'<span style="color:white">\1</span>', text)
+
+        # Replace \x1b[1;90mtext\x1b\[0m for <span style="color:grey"><b>text</b></span>
+        text = re.sub(r'\x1b\[1;90m(.+?)\x1b\[0m', r'<span style="color:grey"><b>\1</b></span>', text)
+        # Replace \x1b[1;91mtext\x1b\[0m for <span style="color:red"><b>text</b></span>
+        text = re.sub(r'\x1b\[1;91m(.+?)\x1b\[0m', r'<span style="color:red"><b>\1</b></span>', text)
+        # Replace \x1b[1;92mtext\x1b\[0m for <span style="color:green"><b>text</b></span>
+        text = re.sub(r'\x1b\[1;92m(.+?)\x1b\[0m', r'<span style="color:green"><b>\1</b></span>', text)
+        # Replace \x1b[1;93mtext\x1b\[0m for <span style="color:yellow"><b>text</b></span>
+        text = re.sub(r'\x1b\[1;93m(.+?)\x1b\[0m', r'<span style="color:yellow"><b>\1</b></span>', text)
+        # Replace \x1b[1;94mtext\x1b\[0m for <span style="color:blue"><b>text</b></span>
+        text = re.sub(r'\x1b\[1;94m(.+?)\x1b\[0m', r'<span style="color:blue"><b>\1</b></span>', text)
+        # Replace \x1b[1;95mtext\x1b\[0m for <span style="color:magenta"><b>text</b></span>
+        text = re.sub(r'\x1b\[1;95m(.+?)\x1b\[0m', r'<span style="color:magenta"><b>\1</b></span>', text)
+        # Replace \x1b[1;96mtext\x1b\[0m for <span style="color:cyan"><b>text</b></span>
+        text = re.sub(r'\x1b\[1;96m(.+?)\x1b\[0m', r'<span style="color:cyan"><b>\1</b></span>', text)
+        # Replace \x1b[1;97mtext\x1b\[0m for <span style="color:white"><b>text</b></span>
+        text = re.sub(r'\x1b\[1;97m(.+?)\x1b\[0m', r'<span style="color:white"><b>\1</b></span>', text)
+
+        # Replace \x1b[0;100mtext\x1b\[0m for <span style="background-color:grey">text</span>
+        text = re.sub(r'\x1b\[0;100m(.+?)\x1b\[0m', r'<span style="background-color:grey">\1</span>', text)
+        # Replace \x1b[0;101mtext\x1b\[0m for <span style="background-color:red">text</span>
+        text = re.sub(r'\x1b\[0;101m(.+?)\x1b\[0m', r'<span style="background-color:red">\1</span>', text)
+        # Replace \x1b[0;102mtext\x1b\[0m for <span style="background-color:green">text</span>
+        text = re.sub(r'\x1b\[0;102m(.+?)\x1b\[0m', r'<span style="background-color:green">\1</span>', text)
+        # Replace \x1b[0;103mtext\x1b\[0m for <span style="background-color:yellow">text</span>
+        text = re.sub(r'\x1b\[0;103m(.+?)\x1b\[0m', r'<span style="background-color:yellow">\1</span>', text)
+        # Replace \x1b[0;104mtext\x1b\[0m for <span style="background-color:blue">text</span>
+        text = re.sub(r'\x1b\[0;104m(.+?)\x1b\[0m', r'<span style="background-color:blue">\1</span>', text)
+        # Replace \x1b[0;105mtext\x1b\[0m for <span style="background-color:magenta">text</span>
+        text = re.sub(r'\x1b\[0;105m(.+?)\x1b\[0m', r'<span style="background-color:magenta">\1</span>', text)
+        # Replace \x1b[0;106mtext\x1b\[0m for <span style="background-color:cyan">text</span>
+        text = re.sub(r'\x1b\[0;106m(.+?)\x1b\[0m', r'<span style="background-color:cyan">\1</span>', text)
+        # Replace \x1b[0;107mtext\x1b\[0m for <span style="background-color:white">text</span>
+        text = re.sub(r'\x1b\[0;107m(.+?)\x1b\[0m', r'<span style="background-color:white">\1</span>', text)
+
+        # if \n is in text, replace it for <br>
+        texts = text.split('\n')
+        print(f"texts: {texts}")
+        # text = re.sub(r'\n', r'<br>', text)
+
+        list_text[i] = text
+    print(list_text)
+    return list_text
+
 def get_level_index(text):
     ###
     # This function return the level of the header
@@ -415,7 +552,7 @@ def print_text(indentation, text, file, margin_left=0):
     file.write(string)
     return indentation
 
-def print_code(indentation, code, output, file, display_data=False):
+def print_code(indentation, code, output, file, type_code="output_code"):
     ###
     # This function print code of the notebook
     # Input:
@@ -478,7 +615,7 @@ def print_code(indentation, code, output, file, display_data=False):
     string = "\n"+("\t"*indentation)+'<div class="prompt output_prompt">Out:</div>'
     file.write(string)
     # indentation += 1
-    if display_data == False:
+    if type_code == "output_code":
         string = "\n"+("\t"*indentation)+'<div class="output_text output_subarea output_execute_result">'
         file.write(string)
         indentation += 1
@@ -496,7 +633,7 @@ def print_code(indentation, code, output, file, display_data=False):
         string = "\n"+("\t"*indentation)+'</div>'
         file.write(string)
         indentation -= 1
-    else:
+    elif type_code == "display_data":
         string = "\n"+("\t"*indentation)+'<div class="output_area">'
         file.write(string)
         indentation += 1
@@ -504,6 +641,26 @@ def print_code(indentation, code, output, file, display_data=False):
         file.write(string)
         # indentation += 1
         string = "\n"+("\t"*indentation)+f'<div class="output_png output_subarea "><img src="data:image/png;base64,{output}" /></div>'
+        file.write(string)
+        indentation -= 1
+        string = "\n"+("\t"*indentation)+'</div>'
+        file.write(string)
+        indentation -= 1
+    elif type_code == "error_code":
+        string = "\n"+("\t"*indentation)+'<div class="output_subarea output_text output_error">'
+        file.write(string)
+        indentation += 1
+        string = "\n"+("\t"*indentation)+'<pre>'
+        file.write(string)
+        indentation += 1
+        for line in output:
+            string = "\n"+("\t"*indentation)+line
+            file.write(string)
+        indentation -= 1
+        string = "\n"+("\t"*indentation)+'</pre>'
+        file.write(string)
+        indentation -= 1
+        string = "\n"+("\t"*indentation)+'</div>'
         file.write(string)
         indentation -= 1
         string = "\n"+("\t"*indentation)+'</div>'
@@ -578,20 +735,18 @@ def print_content(indentation, cells, file):
                     indentation = print_text(indentation, text_formated, file, margin_left)
         elif cell['cell_type'] == 'code':
             if len(cell['outputs']) == 0:
-                indentation = print_code(indentation, cell['source'], [], file)
+                indentation = print_code(indentation, cell['source'], [], file, type_code="output_code")
             else:
                 if cell['outputs'][0]['output_type'] == 'stream':
-                    indentation = print_code(indentation, cell['source'], cell['outputs'][0]['text'], file)
+                    indentation = print_code(indentation, cell['source'], cell['outputs'][0]['text'], file, type_code="output_code")
                 elif cell['outputs'][0]['output_type'] == 'display_data':
-                    indentation = print_code(indentation, cell['source'], cell['outputs'][0]['data']['image/png'], file, display_data=True)
+                    indentation = print_code(indentation, cell['source'], cell['outputs'][0]['data']['image/png'], file, type_code="display_data")
                 elif cell['outputs'][0]['output_type'] == 'execute_result':
-                    indentation = print_code(indentation, cell['source'], cell['outputs'][0]['data']['text/plain'], file)
+                    indentation = print_code(indentation, cell['source'], cell['outputs'][0]['data']['text/plain'], file, type_code="output_code")
                 elif cell['outputs'][0]['output_type'] == 'error':
-                    print(f"cell_type code - output_type error at cell {c}")
-                    print(cell['outputs'][0].keys())
-                    print(cell['outputs'][0]['ename'])
-                    print(cell['outputs'][0]['evalue'])
                     print(cell['outputs'][0]['traceback'])
+                    list_error_text = format_error_text(cell['outputs'][0]['traceback'])
+                    indentation = print_code(indentation, cell['source'], list_error_text, file, type_code="error_code")
                     break
     indentation -= 1
     string = "\n"+("\t"*indentation)+'</div>'
