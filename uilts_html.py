@@ -718,7 +718,7 @@ def print_code(indentation, code, output, file, type_code="output_code"):
     file.write(string)
     indentation += 1
     for line in code:
-        string = "\n"+("\t"*indentation)
+        string = "\n"
         for word in line.split(" "):
             word = word.replace("\n", "")
             continue_line = False
@@ -767,7 +767,7 @@ def print_code(indentation, code, output, file, type_code="output_code"):
             line = line.replace("\n", "")
             if line == "":
                 continue
-            string = "\n"+("\t"*indentation)+line
+            string = "\n"+line
             file.write(string)
         indentation -= 1
         string = "\n"+("\t"*indentation)+'</pre>'
@@ -797,7 +797,7 @@ def print_code(indentation, code, output, file, type_code="output_code"):
         file.write(string)
         indentation += 1
         for line in output:
-            string = "\n"+("\t"*indentation)+line
+            string = "\n"+line
             file.write(string)
         indentation -= 1
         string = "\n"+("\t"*indentation)+'</pre>'
