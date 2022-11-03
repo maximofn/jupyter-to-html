@@ -1,5 +1,6 @@
 from cgitb import text
 import re
+from turtle import position
 
 INDENTATION = 10
 INDENTATION_INDEX = 40
@@ -722,7 +723,11 @@ def print_code(indentation, code, output, file, type_code="output_code"):
     file.write(string)
     indentation += 1
     for line in code:
+# <<<<<<< HEAD
         string = "\n"+("\t"*1)
+# =======
+#         string = "\n"
+# >>>>>>> cf32c735a70cc3da6702df222cf01621fa710c46
         for word in line.split(" "):
             word = word.replace("\n", "")
             continue_line = False
@@ -867,8 +872,11 @@ def print_content(indentation, cells, file):
     file.write(string)
     indentation += 1
     for c, cell in enumerate(cells):
+# <<<<<<< HEAD
         # if c > 2:
         #     break
+# =======
+# >>>>>>> cf32c735a70cc3da6702df222cf01621fa710c46
         if cell['cell_type'] == 'markdown':
             if cell['source'][0].startswith('#'):
                 level, text = get_level_index(cell['source'][0])
