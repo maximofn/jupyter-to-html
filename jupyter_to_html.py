@@ -79,6 +79,8 @@ def main():
     uh.close_div_notebook(indentation, html)
     uh.close_html(html)  # Close the HTML file
 
+    uh.find_unordered_list(html)
+
 
 
 if __name__ == '__main__':

@@ -62,6 +62,21 @@ def format_text(text):
     text_formated = text
     return text_clean, text_formated
 
+def find_unordered_list(file):
+    ###
+    # This function find unordered list in a html file
+    # Input:
+    #   file: html file
+    # Output:
+    #   unordered_list: string
+    ###
+    print(f"{file}")
+    # open file and read get the text
+    # with open(file, 'r') as f:
+    #     text = f.read()
+    
+    # print(text)
+
 def pre_format_error_text(list_text):
     for i, text in enumerate(list_text):
         # Replace < and > for &lt; and &gt;
