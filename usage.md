@@ -1,0 +1,1 @@
+clear && python jupyter_to_html.py -f 2021-06-15-Manejo-de-datos-con-Pandas.ipynb

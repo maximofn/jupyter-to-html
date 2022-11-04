@@ -6,6 +6,7 @@ import sys
 import os
 import utils_jupyter as uj
 import uilts_html as uh
+import format_text as ft
 
 
 def path_name_ext_from_file(file):
@@ -79,7 +80,11 @@ def main():
     uh.close_div_notebook(indentation, html)
     uh.close_html(html)  # Close the HTML file
 
-    uh.find_unordered_list(html)
+    # Post format the HTML file
+    ft.post_format_html(f"_{name}.html")
+
+    # Change separates unordered lists to ordered lists
+    # ft.merge_unordered_list(f"_{name}.html")
 
 
 
