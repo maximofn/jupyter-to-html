@@ -84,7 +84,10 @@ def main():
     ft.post_format_html(f"_{name}.html")
 
     # Change separates unordered lists to ordered lists
-    # ft.merge_unordered_list(f"_{name}.html")
+    ft.merge_unordered_list(f"_{name}.html")
+
+    # Format tables
+    ft.format_tables(f"_{name}.html")
 
 
 

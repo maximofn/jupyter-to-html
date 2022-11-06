@@ -1,5 +1,5 @@
 import re
-import uilts_html as uh
+import numpy as np
 
 
 def format_text(text):
@@ -319,12 +319,15 @@ def post_format_html(file):
     f.close()
     # Change <span class="n"> </span> for <span class="n"></span> in text
     text = re.sub(r'<span class="n"> </span>', r'<span class="n"></span>', text)
+    # Get the list of lines
+    list_text = text.split('\n')
+    list_text = [x for x in list_text if x != '']
     # Write the text in the file
     with open(file, 'w') as f:
-        f.write(text)
+        for text in list_text:
+            f.write(text + '\n')
     # close file
     f.close()
-
 
 def merge_unordered_list(file):
     ###
@@ -334,10 +337,136 @@ def merge_unordered_list(file):
     # Output:
     #   unordered_list: string
     ###
-    # open file and read get the text
-    with open(file, 'r') as f:
+    with open(file, 'r') as f: # open file and read get the text
         text = f.read()
-    # Split text in lines
-    list_text = text.split('\n')
-    print(type(list_text))
+    list_text = text.split('\n')    # split text by \n
+    f.close()   # close file
+    positions = []
+    diffs = []
+    for i in range(len(list_text)): # find the positions of <li>
+        li = re.findall(r'<li>', list_text[i])
+        if len(li) > 0:
+            positions.append(i)
+    positions = np.array(positions) # convert positions to numpy array
+    if len(positions) > 0:  # if there is <li>
+        diffs = np.diff(positions)  # find the difference between positions
+        median = np.median(diffs)   # find the median of the differences
+        start_unordered_list = []
+        end_unordered_list = []
+        start_unordered_list.append(positions[0])
+        for i in range(len(diffs)): # find the start and end of the unordered list
+            if diffs[i] > median:
+                start_unordered_list.append(positions[i+1])
+                end_unordered_list.append(positions[i])
+        end_unordered_list.append(positions[-1])
+        # merge the unordered list
+        for i in range(len(start_unordered_list)):
+            start = start_unordered_list[i]
+            end = end_unordered_list[i]
+            # Find the position of the first <
+            num_indentations = re.search(r'<', list_text[start])
+            num_indentations = num_indentations.start()
+            # Find the position of the first <ul>
+            ul_start_position = re.search(r'<ul>', list_text[start])
+            ul_start_position = ul_start_position.start()
+            # Find the position of the first </ul>
+            ul_end_position = re.search(r'</ul>', list_text[start])
+            ul_end_position = ul_end_position.start()
+            # Find the position of the first <li>
+            li_start_position = re.search(r'<li>', list_text[start])
+            li_start_position = li_start_position.start()
+            # Find the position of the first </li>
+            li_end_position = re.search(r'</li>', list_text[start])
+            li_end_position = li_end_position.start()
+            # Create the unordered list
+            unordered_list = list_text[start][:ul_start_position]
+            unordered_list += "\n" + "\t"*(num_indentations+1) + list_text[start][ul_start_position:li_start_position]
+            for j, pos in enumerate(positions):
+                if pos >= start and pos <= end:
+                    li_start = re.search(r'<li>', list_text[pos])
+                    li_start = li_start.start()
+                    ul_end = re.search(r'</ul>', list_text[pos])
+                    ul_end = ul_end.start()
+                    unordered_list += "\n" + "\t"*(num_indentations+2) + list_text[pos][li_start:ul_end]
+                    list_text[pos] = ""
+            unordered_list += "\n" + "\t"*(num_indentations+1) + list_text[start][ul_end_position:]
+            list_text[start] = unordered_list
+        # Write the text in the file
+        with open(file, 'w') as f:
+            for line in list_text:
+                f.write(line + "\n")
+        f.close()   # close file
+
+def format_tables(file):
+    ###
+    # This function formats the tables in a html file
+    # Input:
+    #   file: html file
+    # Output:
+    #   file: html file
+    ###
+    with open(file, 'r') as f: # open file and read get the text
+        text = f.read()
+    list_text = text.split('\n')    # split text by \n
+    f.close()   # close file
+    positions = []
+    for i in range(len(list_text)):
+        if re.findall('\|.+\|', list_text[i]):
+            positions.append(i)
+    positions = np.array(positions)
+    if len(positions) > 0:
+        diffs = np.diff(positions)
+        median = np.median(diffs)
+        start_table = []
+        end_table = []
+        start_table.append(positions[0])
+        for i in range(len(diffs)):
+            if diffs[i] > median:
+                start_table.append(positions[i+1])
+                end_table.append(positions[i])
+        end_table.append(positions[-1])
+        # Create table
+        for i in range(len(start_table)):
+            start = start_table[i]
+            end = end_table[i]
+            # Get index into positions when item is equal to start
+            idx = int(np.where(positions == start)[0])
+            start_content = positions[idx+2]
+            print(f"start_content: {start_content}")
+            # Find the position of the first <
+            num_indentations = re.search(r'<', list_text[start])
+            num_indentations = num_indentations.start()
+            # Find the position of the first |
+            pipe_start_position = re.search(r'\|', list_text[start])
+            pipe_start_position = pipe_start_position.start()
+            # Find the position of the first </p>
+            p_end_position = re.search(r'</p>', list_text[start])
+            p_end_position = p_end_position.start()
+            # Get the table header
+            table_header = list_text[start][pipe_start_position+1:p_end_position].split('|')
+            table = "\t"*(num_indentations+0) + "<table>"
+            table += "\n" + "\t"*(num_indentations+1) + "<tr>"
+            for j in range(len(table_header)):
+                table += "\n" + "\t"*(num_indentations+2) + "<th>" + table_header[j] + "</th>"  
+            table += "\n" + "\t"*(num_indentations+1) + "</tr>"
+            for j, pos in enumerate(positions):
+                if pos >= start_content and pos <= end:
+                    pipe_start = re.search(r'\|', list_text[pos])
+                    pipe_start = pipe_start.start()
+                    p_end = re.search(r'</p>', list_text[pos])
+                    p_end = p_end.start()
+                    table_row = list_text[pos][pipe_start+1:p_end].split('|')
+                    table += "\n" + "\t"*(num_indentations+1) + "<tr>"
+                    for k in range(len(table_row)):
+                        table += "\n" + "\t"*(num_indentations+2) + "<td>" + table_row[k] + "</td>"
+                    table += "\n" + "\t"*(num_indentations+1) + "</tr>"
+                    list_text[pos] = ""
+            list_text[positions[idx+1]] = ""
+            table += "\n" + "\t"*(num_indentations+0) + "</table>"
+            list_text[start] = table
+            # Write the text in the file
+            with open(file, 'w') as f:
+                for line in list_text:
+                    f.write(line + "\n")
+            f.close()   # close file
 
