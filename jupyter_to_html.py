@@ -49,7 +49,7 @@ def main():
 
     # Create the HTML file
     # html = uh.open_html(f"{path}/{name}.html")
-    html = uh.open_html(f"_{name}.html")
+    html = uh.open_html(f"{name}.html")
 
     # Add the first part of the HTML file
     uh.first_paragraph(html)    # Write the first paragraph
@@ -62,7 +62,7 @@ def main():
     
     # Add the index head
     indentation += 1
-    indentation = uh.print_index_head(indentation, simplex_name, html)
+    indentation = uh.print_index_head(indentation, "Índice", html)
     uh.print_blank_line(html)
 
     # Add the index body
@@ -81,13 +81,13 @@ def main():
     uh.close_html(html)  # Close the HTML file
 
     # Post format the HTML file
-    ft.post_format_html(f"_{name}.html")
+    ft.post_format_html(f"{name}.html")
 
     # Change separates unordered lists to ordered lists
-    ft.merge_unordered_list(f"_{name}.html")
+    ft.merge_unordered_list(f"{name}.html")
 
     # Format tables
-    ft.format_tables(f"_{name}.html")
+    ft.format_tables(f"{name}.html")
 
 
 
