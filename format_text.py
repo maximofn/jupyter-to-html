@@ -319,6 +319,29 @@ def post_format_html(file):
     f.close()
     # Change <span class="n"> </span> for <span class="n"></span> in text
     text = re.sub(r'<span class="n"> </span>', r'<span class="n"></span>', text)
+    # Remove blanck blocks
+    text = re.sub(\
+        r'		<div class="cell border-box-sizing text_cell rendered">\
+				<div class="prompt input_prompt">\
+					<div class="inner_cell">\
+						<div class="text_cell_render border-box-sizing rendered_html">\
+							<p style="margin-left: 0px;"></p>\
+						</div>\
+					</div>\
+				</div>\
+			</div>', r'', text)
+    # Remove blanck outputs
+    text = re.sub(\
+        r'			<div class="output_wrapper">\
+				<div class="output">\
+					<div class="output_area">\
+						<div class="prompt" style="margin-left: 20px;">Output:</div>\
+						<div class="output_subarea output_stream output_stdout output_text">\
+							<pre style="margin-left: 60px;"></pre>\
+						</div>\
+					</div>\
+				</div>\
+			</div>', r'', text)
     # Get the list of lines
     list_text = text.split('\n')
     list_text = [x for x in list_text if x != '']
@@ -432,7 +455,6 @@ def format_tables(file):
             # Get index into positions when item is equal to start
             idx = int(np.where(positions == start)[0])
             start_content = positions[idx+2]
-            print(f"start_content: {start_content}")
             # Find the position of the first <
             num_indentations = re.search(r'<', list_text[start])
             num_indentations = num_indentations.start()
@@ -443,7 +465,7 @@ def format_tables(file):
             p_end_position = re.search(r'</p>', list_text[start])
             p_end_position = p_end_position.start()
             # Get the table header
-            table_header = list_text[start][pipe_start_position+1:p_end_position].split('|')
+            table_header = list_text[start][pipe_start_position+1:p_end_position-1].split('|')
             table = "\t"*(num_indentations+0) + "<table>"
             table += "\n" + "\t"*(num_indentations+1) + "<tr>"
             for j in range(len(table_header)):
@@ -455,7 +477,7 @@ def format_tables(file):
                     pipe_start = pipe_start.start()
                     p_end = re.search(r'</p>', list_text[pos])
                     p_end = p_end.start()
-                    table_row = list_text[pos][pipe_start+1:p_end].split('|')
+                    table_row = list_text[pos][pipe_start+1:p_end-1].split('|')
                     table += "\n" + "\t"*(num_indentations+1) + "<tr>"
                     for k in range(len(table_row)):
                         table += "\n" + "\t"*(num_indentations+2) + "<td>" + table_row[k] + "</td>"

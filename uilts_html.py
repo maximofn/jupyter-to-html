@@ -429,7 +429,13 @@ def print_code(indentation, code, output, file, type_code="output_code"):
     file.write(string)
     indentation += 1
     for line in code:
+        # print(line)
         string = "<p>"
+        # Get spaces before the code
+        spaces = re.search(r"^\s*", line)
+        if spaces:
+            spaces = spaces.group(0)
+            string += spaces
         for w, word in enumerate(line.split(" ")):
             if "\n" in word:
                 if len(word) > 1:
