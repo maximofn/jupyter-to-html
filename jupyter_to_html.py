@@ -70,7 +70,7 @@ def main():
     uh.print_blank_line(html)
 
     # Add the content of the notebook
-    indentation = uh.print_content(indentation, cells, html)
+    indentation = uh.print_content(indentation, name, cells, html)
     uh.print_blank_line(html)
     
     # Close the two first divs

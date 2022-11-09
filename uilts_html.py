@@ -575,7 +575,45 @@ def print_index_body(indentation, headers, file):
     print_blank_line(file)
     return indentation
 
-def print_content(indentation, cells, file):
+def print_open_in_colab_button(indentation, name, html):
+    ###
+    # This function print the button to open the notebook in colab
+    # Input:
+    #   Indentation: int
+    #   name: str
+    #   html: file
+    # Output:
+    #   Indentation: int
+    ###
+    string = "\n"+("\t"*indentation)+'<div class="cell border-box-sizing text_cell rendered">'
+    html.write(string)
+    indentation += 1
+    string = "\n"+("\t"*indentation)+'<div class="prompt input_prompt">'
+    html.write(string)
+    indentation += 1
+    string = "\n"+("\t"*indentation)+'<div class="inner_cell">'
+    html.write(string)
+    indentation += 1
+    string = "\n"+("\t"*indentation)+'<div class="text_cell_render border-box-sizing rendered_html">'
+    html.write(string)
+    indentation += 1
+    string = "\n"+("\t"*indentation)+f'<p style="margin-left: 0px;"><a href="https://colab.research.google.com/github/maximofn/portafolio/blob/main/posts/{name}.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>'
+    html.write(string)
+    indentation -= 1
+    string = "\n"+("\t"*indentation)+'</div>'
+    html.write(string)
+    indentation -= 1
+    string = "\n"+("\t"*indentation)+'</div>'
+    html.write(string)
+    indentation -= 1
+    string = "\n"+("\t"*indentation)+'</div>'
+    html.write(string)
+    indentation -= 1
+    string = "\n"+("\t"*indentation)+'</div>'
+    html.write(string)
+    return indentation
+
+def print_content(indentation, name, cells, file):
     ###
     # This function print the content of the notebook
     # Input:
@@ -590,6 +628,9 @@ def print_content(indentation, cells, file):
     string = "\n"+("\t"*indentation)+'<div>'
     file.write(string)
     indentation += 1
+    # Add Open in Colab button
+    indentation = print_open_in_colab_button(indentation, name, file)
+    print_blank_line(file)
     for c, cell in enumerate(cells):
         if cell['cell_type'] == 'markdown':
             if cell['source'][0].startswith('#'):
