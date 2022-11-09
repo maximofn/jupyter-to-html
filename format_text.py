@@ -434,7 +434,7 @@ def format_tables(file):
     f.close()   # close file
     positions = []
     for i in range(len(list_text)):
-        if re.findall('^\|.+\|$', list_text[i]):
+        if re.findall('<p style="margin-left: 0px;">\|.+\|</p>', list_text[i]):
             positions.append(i)
     positions = np.array(positions)
     if len(positions) > 0:

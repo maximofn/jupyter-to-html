@@ -425,7 +425,7 @@ def print_code(indentation, code, output, file, type_code="output_code"):
     string = "\n"+("\t"*indentation)+'<div class=" highlight hl-python3">'
     file.write(string)
     indentation += 1
-    string = "\n"+("\t"*indentation)+f'<pre style="margin-left: {4*INDENTATION}px">'
+    string = "\n"+("\t"*indentation)+f'<pre style="margin-left: {4*INDENTATION}px; line-height: 0%;">'
     file.write(string)
     indentation += 1
     for line in code:
@@ -486,7 +486,7 @@ def print_code(indentation, code, output, file, type_code="output_code"):
         string = "\n"+("\t"*indentation)+'<div class="output_subarea output_stream output_stdout output_text">'
         file.write(string)
         indentation += 1
-        string = "\n"+("\t"*indentation)+f'<pre style="margin-left: {6*INDENTATION}px;">'
+        string = "\n"+("\t"*indentation)+f'<pre style="margin-left: {6*INDENTATION}px; line-height: 0%;">'
         file.write(string)
         indentation += 1
         for line in output:
@@ -520,7 +520,7 @@ def print_code(indentation, code, output, file, type_code="output_code"):
         string = "\n"+("\t"*indentation)+'<div class="output_subarea output_text output_error">'
         file.write(string)
         indentation += 1
-        string = "\n"+("\t"*indentation)+f'<pre style="margin-left: {6*INDENTATION}px;">'
+        string = "\n"+("\t"*indentation)+f'<pre style="margin-left: {6*INDENTATION}px; line-height: 0%;">'
         file.write(string)
         indentation += 1
         for line in output:
@@ -609,14 +609,14 @@ def print_content(indentation, cells, file):
             if len(cell['outputs']) == 0:
                 indentation = print_code(indentation, cell['source'], [], file, type_code="output_code")
             else:
-                if cell['outputs'][0]['output_type'] == 'stream':
-                    indentation = print_code(indentation, cell['source'], cell['outputs'][0]['text'], file, type_code="output_code")
-                elif cell['outputs'][0]['output_type'] == 'display_data':
-                    indentation = print_code(indentation, cell['source'], cell['outputs'][0]['data']['image/png'], file, type_code="display_data")
-                elif cell['outputs'][0]['output_type'] == 'execute_result':
-                    indentation = print_code(indentation, cell['source'], cell['outputs'][0]['data']['text/plain'], file, type_code="output_code")
-                elif cell['outputs'][0]['output_type'] == 'error':
-                    list_error_text = ft.pre_format_error_text(cell['outputs'][0]['traceback'])
+                if cell['outputs'][-1]['output_type'] == 'stream':
+                    indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['text'], file, type_code="output_code")
+                elif cell['outputs'][-1]['output_type'] == 'display_data':
+                    indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['data']['image/png'], file, type_code="display_data")
+                elif cell['outputs'][-1]['output_type'] == 'execute_result':
+                    indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['data']['text/plain'], file, type_code="output_code")
+                elif cell['outputs'][-1]['output_type'] == 'error':
+                    list_error_text = ft.pre_format_error_text(cell['outputs'][-1]['traceback'])
                     list_error_text = ft.format_error_text(list_error_text)
                     indentation = print_code(indentation, cell['source'], list_error_text, file, type_code="error_code")
     indentation -= 1
