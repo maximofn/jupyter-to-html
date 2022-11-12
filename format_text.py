@@ -13,6 +13,8 @@ def format_text(text):
     text_clean = text
     # Replace link to a image in markdown format to html format
     text = re.sub(r'\!\[(.*?)\]\((.*?)\)', r'<p align="center"><img src="\2" alt="\1"></p>', text_clean)
+    # Replace link in markdown format to html format
+    text = re.sub(r'\[(.*?)\]\((.*?)\)', r'<a href="\2" target="_blank">\1</a>', text)
     # Replace code block in markdown format to code html format
     text = re.sub(r'^```(.+?)```', r'<code>\1</code>', text)
     # Replace `*` for <code><b>*</code></b>
