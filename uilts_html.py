@@ -445,6 +445,8 @@ def print_code(indentation, code, output, file, type_code="output_code"):
             continue_line = False
             if word == "":
                 continue_line = True
+            word = word.replace("<", "&lt;")
+            word = word.replace(">", "&gt;")
             string = string+'<span class="n">'+word
             if w == len(line.split(" "))-1:
                 string = string+'</span></p>'
@@ -470,65 +472,82 @@ def print_code(indentation, code, output, file, type_code="output_code"):
     string = "\n"+("\t"*indentation)+'</div>'
     file.write(string)
     # indentation += 1
-    string = "\n"+("\t"*indentation)+'<div class="output_wrapper">'
-    file.write(string)
-    indentation += 1
-    string = "\n"+("\t"*indentation)+'<div class="output">'
-    file.write(string)
-    indentation += 1
-    string = "\n"+("\t"*indentation)+'<div class="output_area">'
-    file.write(string)
-    indentation += 1
-    string = "\n"+("\t"*indentation)+f'<div class="prompt" style="margin-left: {2*INDENTATION}px;">Output:</div>'
-    file.write(string)
-    # indentation += 1
-    if type_code == "output_code":
-        string = "\n"+("\t"*indentation)+'<div class="output_subarea output_stream output_stdout output_text">'
+    if len(output) > 0:
+        string = "\n"+("\t"*indentation)+'<div class="output_wrapper">'
         file.write(string)
         indentation += 1
-        string = "\n"+("\t"*indentation)+f'<pre style="margin-left: {6*INDENTATION}px; line-height: 0%;">'
+        string = "\n"+("\t"*indentation)+'<div class="output">'
         file.write(string)
         indentation += 1
-        for line in output:
-            line = line.replace("\n", "")
-            if line == "":
-                continue
-            string = "<p>"+line+"</p>"
-            file.write(string)
-        indentation -= 1
-        # string = "\n"+("\t"*indentation)+'</pre>'
-        string = '</pre>'
-        file.write(string)
-        indentation -= 1
-        string = "\n"+("\t"*indentation)+'</div>'
-        file.write(string)
-        indentation -= 1
-    elif type_code == "display_data":
         string = "\n"+("\t"*indentation)+'<div class="output_area">'
         file.write(string)
         indentation += 1
-        string = "\n"+("\t"*indentation)+'<div class="prompt"></div>'
+        string = "\n"+("\t"*indentation)+f'<div class="prompt" style="margin-left: {2*INDENTATION}px;">Output:</div>'
         file.write(string)
         # indentation += 1
-        string = "\n"+("\t"*indentation)+f'<div class="output_png output_subarea" style="margin-left: {6*INDENTATION}px;"><img src="data:image/png;base64,{output}" /></div>'
-        file.write(string)
-        indentation -= 1
-        string = "\n"+("\t"*indentation)+'</div>'
-        file.write(string)
-        indentation -= 1
-    elif type_code == "error_code":
-        string = "\n"+("\t"*indentation)+'<div class="output_subarea output_text output_error">'
-        file.write(string)
-        indentation += 1
-        string = "\n"+("\t"*indentation)+f'<pre style="margin-left: {6*INDENTATION}px; line-height: 0%;">'
-        file.write(string)
-        indentation += 1
-        for line in output:
-            string = "<p>"+line+"</p>"
+        if type_code == "output_code":
+            string = "\n"+("\t"*indentation)+'<div class="output_subarea output_stream output_stdout output_text">'
             file.write(string)
+            indentation += 1
+            string = "\n"+("\t"*indentation)+f'<pre style="margin-left: {6*INDENTATION}px; line-height: 0%;">'
+            file.write(string)
+            indentation += 1
+            for line in output:
+                line = line.replace("\n", "")
+                line = line.replace("<", "&lt;")
+                line = line.replace(">", "&gt;")
+                if line == "":
+                    continue
+                string = "<p>"+line+"</p>"
+                file.write(string)
+            indentation -= 1
+            # string = "\n"+("\t"*indentation)+'</pre>'
+            string = '</pre>'
+            file.write(string)
+            indentation -= 1
+            string = "\n"+("\t"*indentation)+'</div>'
+            file.write(string)
+            indentation -= 1
+        elif type_code == "display_data":
+            string = "\n"+("\t"*indentation)+'<div class="output_area">'
+            file.write(string)
+            indentation += 1
+            string = "\n"+("\t"*indentation)+'<div class="prompt"></div>'
+            file.write(string)
+            # indentation += 1
+            string = "\n"+("\t"*indentation)+f'<div class="output_png output_subarea" style="margin-left: {6*INDENTATION}px;"><img src="data:image/png;base64,{output}" /></div>'
+            file.write(string)
+            indentation -= 1
+            string = "\n"+("\t"*indentation)+'</div>'
+            file.write(string)
+            indentation -= 1
+        elif type_code == "error_code":
+            string = "\n"+("\t"*indentation)+'<div class="output_subarea output_text output_error">'
+            file.write(string)
+            indentation += 1
+            string = "\n"+("\t"*indentation)+f'<pre style="margin-left: {6*INDENTATION}px; line-height: 0%;">'
+            file.write(string)
+            indentation += 1
+            for line in output:
+                line = line.replace("<", "&lt;")
+                line = line.replace(">", "&gt;")
+                string = "<p>"+line+"</p>"
+                file.write(string)
+            indentation -= 1
+            # string = "\n"+("\t"*indentation)+'</pre>'
+            string = '</pre>'
+            file.write(string)
+            indentation -= 1
+            string = "\n"+("\t"*indentation)+'</div>'
+            file.write(string)
+            indentation -= 1
+            string = "\n"+("\t"*indentation)+'</div>'
+            file.write(string)
+            indentation -= 1
+        string = "\n"+("\t"*indentation)+'</div>'
+        file.write(string)
         indentation -= 1
-        # string = "\n"+("\t"*indentation)+'</pre>'
-        string = '</pre>'
+        string = "\n"+("\t"*indentation)+'</div>'
         file.write(string)
         indentation -= 1
         string = "\n"+("\t"*indentation)+'</div>'
@@ -536,18 +555,8 @@ def print_code(indentation, code, output, file, type_code="output_code"):
         indentation -= 1
         string = "\n"+("\t"*indentation)+'</div>'
         file.write(string)
+    else:
         indentation -= 1
-    string = "\n"+("\t"*indentation)+'</div>'
-    file.write(string)
-    indentation -= 1
-    string = "\n"+("\t"*indentation)+'</div>'
-    file.write(string)
-    indentation -= 1
-    string = "\n"+("\t"*indentation)+'</div>'
-    file.write(string)
-    indentation -= 1
-    string = "\n"+("\t"*indentation)+'</div>'
-    file.write(string)
     return indentation
 
 def print_index_body(indentation, headers, file):
