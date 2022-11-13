@@ -529,8 +529,6 @@ def print_code(indentation, code, output, file, type_code="output_code"):
             file.write(string)
             indentation += 1
             for line in output:
-                line = line.replace("<", "&lt;")
-                line = line.replace(">", "&gt;")
                 string = "<p>"+line+"</p>"
                 file.write(string)
             indentation -= 1
