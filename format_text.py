@@ -24,7 +24,7 @@ def format_text(text):
     # Replace * character for <em> tag
     text = re.sub(r'\*(.+?)\*', r'<em>\1</em>', text)
     # Replace "* " for <ul> tag
-    text = re.sub(r'\s?\*\s+(.+)', r'<ul><li>\1</li></ul>', text)
+    text = re.sub(r'^\s?\*\s+(.+)', r'<ul><li>\1</li></ul>', text)
     # Replace "d " for <ol> tag (TODO: fix this)
     # text = re.sub(r'\s?\d\.\s+(.+)', r'<ol><li>\1</li></ol>', text)
     text_formated = text
