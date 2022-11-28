@@ -49,7 +49,7 @@ def main():
 
     # Create the HTML file
     # html = uh.open_html(f"{path}/{name}.html")
-    html = uh.open_html(f"{name}.html")
+    html = uh.open_html(f"html_files/{name}.html")
 
     # Add the first part of the HTML file
     uh.first_paragraph(html)    # Write the first paragraph
@@ -81,13 +81,13 @@ def main():
     uh.close_html(html)  # Close the HTML file
 
     # Post format the HTML file
-    ft.post_format_html(f"{name}.html")
+    ft.post_format_html(f"html_files/{name}.html")
 
     # Change separates unordered lists to ordered lists
-    ft.merge_unordered_list(f"{name}.html")
+    ft.merge_unordered_list(f"html_files/{name}.html")
 
     # Format tables
-    ft.format_tables(f"{name}.html")
+    ft.format_tables(f"html_files/{name}.html")
 
 
 
