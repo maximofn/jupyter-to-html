@@ -41,8 +41,12 @@ def main():
     
     # Open notebook and get cells and headers
     notebook = uj.open_notebook(args.file)  # Open the notebook as a dictionary
+    if notebook is None:
+        sys.exit(1)
     cells = notebook['cells']   # Get only with the cells
     headers = uj.get_headers(cells) # Get the headers
+    if headers is None:
+        sys.exit(1)
 
     # Get name and simple name of the notebook
     _, name, _, simplex_name = path_name_ext_from_file(args.file)
