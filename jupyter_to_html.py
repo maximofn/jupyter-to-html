@@ -24,7 +24,7 @@ def parse_arguments():
     if args.file:
         path, name, extension, _ = path_name_ext_from_file(args.file)
         if extension == '.ipynb':
-            print(f"Convert {name}{extension} to {name}.html")
+            print(f"\Convert {path}{name}{extension} to {name}.html")
         else:
             print(f"File {args.file} is not a Jupyter notebook")
             sys.exit(1)
@@ -36,11 +36,9 @@ def parse_arguments():
 
 
 
-def main():
-    args = parse_arguments()
-    
+def main(file):
     # Open notebook and get cells and headers
-    notebook = uj.open_notebook(args.file)  # Open the notebook as a dictionary
+    notebook = uj.open_notebook(file)  # Open the notebook as a dictionary
     if notebook is None:
         sys.exit(1)
     cells = notebook['cells']   # Get only with the cells
@@ -49,7 +47,7 @@ def main():
         sys.exit(1)
 
     # Get name and simple name of the notebook
-    _, name, _, simplex_name = path_name_ext_from_file(args.file)
+    _, name, _, simplex_name = path_name_ext_from_file(file)
 
     # Create the HTML file
     # html = uh.open_html(f"{path}/{name}.html")
@@ -99,4 +97,5 @@ def main():
 
 
 if __name__ == '__main__':
+    args = parse_arguments()
     main()
