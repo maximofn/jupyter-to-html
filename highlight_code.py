@@ -50,6 +50,72 @@ def highlight_code(code):
     html_code = html_code.replace('<span class="kc">', '<span style="color: #7f6e38;">')
     # Replace <span class="s1"> by <span style="color: #8d783e;">
     html_code = html_code.replace('<span class="s1">', '<span style="color: #8d783e;">')
+    # Replace <span class="ow"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="ow">', '<span style="color: #7f6e38;">')
+    # Replace <span class="c1"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="c1">', '<span style="color: #7f6e38;">')
+    # Replace <span class="cm"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="cm">', '<span style="color: #7f6e38;">')
+    # Replace <span class="s"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="s">', '<span style="color: #7f6e38;">')
+    # Replace <span class="c"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="c">', '<span style="color: #7f6e38;">')
+    # Replace <span class="err"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="err">', '<span style="color: #7f6e38;">')
+    # Replace <span class="gd"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="gd">', '<span style="color: #7f6e38;">')
+    # Replace <span class="ge"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="ge">', '<span style="color: #7f6e38;">')
+    # Replace <span class="gp"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="gp">', '<span style="color: #7f6e38;">')
+    # Replace <span class="gs"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="gs">', '<span style="color: #7f6e38;">')
+    # Replace <span class="gu"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="gu">', '<span style="color: #7f6e38;">')
+    # Replace <span class="gt"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="gt">', '<span style="color: #7f6e38;">')
+    # Replace <span class="kc"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="kc">', '<span style="color: #7f6e38;">')
+    # Replace <span class="kd"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="kd">', '<span style="color: #7f6e38;">')
+    # Replace <span class="kn"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="kn">', '<span style="color: #7f6e38;">')
+    # Replace <span class="kp"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="kp">', '<span style="color: #7f6e38;">')
+    # Replace <span class="kr"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="kr">', '<span style="color: #7f6e38;">')
+    # Replace <span class="kt"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="kt">', '<span style="color: #7f6e38;">')
+    # Replace <span class="m"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="m">', '<span style="color: #7f6e38;">')
+    # Replace <span class="nf"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="nf">', '<span style="color: #7f6e38;">')
+    # Replace <span class="vm"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="vm">', '<span style="color: #7f6e38;">')
+    # Replace <span class="sd"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="sd">', '<span style="color: #7f6e38;">')
+    # Replace <span class="nd"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="nd">', '<span style="color: #7f6e38;">')
+    # Replace <span class="nl"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="nl">', '<span style="color: #7f6e38;">')
+    # Replace <span class="nn"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="nn">', '<span style="color: #7f6e38;">')
+    # Replace <span class="nt"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="nt">', '<span style="color: #7f6e38;">')
+    # Replace <span class="nv"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="nv">', '<span style="color: #7f6e38;">')
+    # Replace <span class="ow"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="ow">', '<span style="color: #7f6e38;">')
+    # Replace <span class="w"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="w">', '<span style="color: #7f6e38;">')
+    # Replace <span class="nc"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="nc">', '<span style="color: #7f6e38;">')
+    # Replace <span class="fm"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="fm">', '<span style="color: #7f6e38;">')
+    # Replace <span class="bp"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="bp">', '<span style="color: #7f6e38;">')
+    # Replace <span class="ne"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="ne">', '<span style="color: #7f6e38;">')
     # If <span class is in the code show one warning
     if '<span class' in html_code:
         # Locate the position of the first <span class
