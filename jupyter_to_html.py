@@ -87,8 +87,11 @@ def main():
     # Post format the HTML file
     ft.post_format_html(f"html_files/{name}.html")
 
-    # Change separates unordered lists to ordered lists
+    # Change separates unordered lists to join unordered lists
     ft.merge_unordered_list(f"html_files/{name}.html")
+
+    # Change separates ordered lists to join ordered lists
+    ft.merge_ordered_list(f"html_files/{name}.html")
 
     # Format tables
     ft.format_tables(f"html_files/{name}.html")
