@@ -2,7 +2,7 @@ import re
 import numpy as np
 
 
-def format_text(text):
+def format_text(text, header=False):
     ###
     # This function change text in markdown format to html format
     # Input:
@@ -24,9 +24,19 @@ def format_text(text):
     # Replace * character for <em> tag
     text = re.sub(r'\*(.+?)\*', r'<em>\1</em>', text)
     # Replace "* " for <ul> tag
-    text = re.sub(r'^\s?\*\s+(.+)', r'<ul><li>\1</li></ul>', text)
+    lines = re.findall(r'^\s*\*\s+(.+?)$', text, re.MULTILINE)
+    for line in lines:
+        pos = text.find('*')+1
+        text = re.sub(r'^\s*\*\s+(.+?)$', r'\1', text)
+        text = ("<ul>"*pos) + f"<li>{text}</li>" + ("</ul>"*pos)
     # Replace "d " for <ol> tag (TODO: fix this)
-    # text = re.sub(r'\s?\d\.\s+(.+)', r'<ol><li>\1</li></ol>', text)
+    lines = re.findall(r'^\s*\d+.\s+(.+?)$', text, re.MULTILINE)
+    for line in lines:
+        if not header:
+            pos = text.find('.')+1
+            text = re.sub(r'^\s*\d+.\s+(.+?)$', r'\1', text)
+            text = ("<ol>"*pos) + f"<oli>{text}</oli>" + ("</ol>"*pos)
+    # Return the text
     text_formated = text
     return text_clean, text_formated
 
@@ -362,36 +372,45 @@ def merge_unordered_list(file):
     # Output:
     #   unordered_list: string
     ###
-    with open(file, 'r') as f: # open file and read get the text
+    # open file and read get the text
+    with open(file, 'r') as f:
         text = f.read()
     list_text = text.split('\n')    # split text by \n
     f.close()   # close file
+    # Get all the lines that have <li>
     positions = []
-    diffs = []
     for i in range(len(list_text)): # find the positions of <li>
         li = re.findall(r'<li>', list_text[i])
         if len(li) > 0:
             positions.append(i)
     positions = np.array(positions) # convert positions to numpy array
+    # If there is <li>
     if len(positions) > 0:  # if there is <li>
-        diffs = np.diff(positions)  # find the difference between positions
+        # Calculate the median of the differences between positions. If the difference is greater than the median, it is an unordered list
+        diffs = np.diff(positions)  # find the difference between positions with <li>
         median = np.median(diffs)   # find the median of the differences
+        # Find the start and end of the unordered list
         start_unordered_list = []
         end_unordered_list = []
         start_unordered_list.append(positions[0])
         for i in range(len(diffs)): # find the start and end of the unordered list
+            # If the difference is greater than the median, it is an unordered list
             if diffs[i] > median:
                 start_unordered_list.append(positions[i+1])
                 end_unordered_list.append(positions[i])
         end_unordered_list.append(positions[-1])
-        # merge the unordered list
+        # Now, we have the start and end of the all unordered list, merge the unordered list
         for i in range(len(start_unordered_list)):
+            # Start and end of the unordered list
             start = start_unordered_list[i]
             end = end_unordered_list[i]
             # Find the position of the first <
             num_indentations = re.search(r'<', list_text[start])
             num_indentations = num_indentations.start()
-            # Find the position of the first <ul>
+            # Get the number of <ul> and </ul> into list_text[start]
+            num_ul_level0 = len(re.findall(r'<ul>', list_text[start]))
+            num_ul_end_level0 = len(re.findall(r'</ul>', list_text[start]))
+            level = 0
             ul_start_position = re.search(r'<ul>', list_text[start])
             ul_start_position = ul_start_position.start()
             # Find the position of the first </ul>
@@ -405,17 +424,122 @@ def merge_unordered_list(file):
             li_end_position = li_end_position.start()
             # Create the unordered list
             unordered_list = list_text[start][:ul_start_position]
-            unordered_list += "\n" + "\t"*(num_indentations+1) + list_text[start][ul_start_position:li_start_position]
+            unordered_list += "\n" + "\t"*(num_indentations+1) + "<ul>"
+            num_ul_old = num_ul_level0
+            # num_ul_end_old = num_ul_end_level0
             for j, pos in enumerate(positions):
                 if pos >= start and pos <= end:
+                    # Get the number of <ul> and </ul> into list_text[start]
+                    num_ul = len(re.findall(r'<ul>', list_text[pos]))
+                    num_ul_end = len(re.findall(r'</ul>', list_text[pos]))
+                    if num_ul > num_ul_old: 
+                        level += 1
+                        num_ul_old = num_ul
+                    if num_ul < num_ul_old: 
+                        level -= 1
+                        num_ul_old = num_ul
                     li_start = re.search(r'<li>', list_text[pos])
                     li_start = li_start.start()
                     ul_end = re.search(r'</ul>', list_text[pos])
                     ul_end = ul_end.start()
-                    unordered_list += "\n" + "\t"*(num_indentations+2) + list_text[pos][li_start:ul_end]
+                    unordered_list += "\n" + "\t"*(num_indentations+2) + ("<ul>"*level) + list_text[pos][li_start:ul_end] + ("</ul>"*level)
                     list_text[pos] = ""
-            unordered_list += "\n" + "\t"*(num_indentations+1) + list_text[start][ul_end_position:]
+            unordered_list += "\n" + "\t"*(num_indentations+1) + "</ul>"
+            unordered_list += "\n" + "\t"*(num_indentations) + "</p>"
             list_text[start] = unordered_list
+        # Write the text in the file
+        with open(file, 'w') as f:
+            for line in list_text:
+                f.write(line + "\n")
+        f.close()   # close file
+
+def merge_ordered_list(file):
+    ###
+    # This function find unordered list in a html file
+    # Input:
+    #   file: html file
+    # Output:
+    #   unordered_list: string
+    ###
+    # open file and read get the text
+    with open(file, 'r') as f:
+        text = f.read()
+    list_text = text.split('\n')    # split text by \n
+    f.close()   # close file
+    # Get all the lines that have <li>
+    positions = []
+    for i in range(len(list_text)): # find the positions of <oli>
+        li = re.findall(r'<oli>', list_text[i])
+        if len(li) > 0:
+            positions.append(i)
+    positions = np.array(positions) # convert positions to numpy array
+    # If there is <oli>
+    if len(positions) > 0:  # if there is <oli>
+        # Calculate the median of the differences between positions. If the difference is greater than the median, it is an unordered list
+        diffs = np.diff(positions)  # find the difference between positions with <oli>
+        median = np.median(diffs)   # find the median of the differences
+        # Find the start and end of the unordered list
+        start_ordered_list = []
+        end_ordered_list = []
+        start_ordered_list.append(positions[0])
+        for i in range(len(diffs)): # find the start and end of the unordered list
+            # If the difference is greater than the median, it is an unordered list
+            if diffs[i] > median:
+                start_ordered_list.append(positions[i+1])
+                end_ordered_list.append(positions[i])
+        end_ordered_list.append(positions[-1])
+        # Now, we have the start and end of the all ordered list, merge the ordered list
+        for i in range(len(start_ordered_list)):
+            # Start and end of the ordered list
+            start = start_ordered_list[i]
+            end = end_ordered_list[i]
+            # Find the position of the first <
+            num_indentations = re.search(r'<', list_text[start])
+            num_indentations = num_indentations.start()
+            # Get the number of <ol> and </ol> into list_text[start]
+            num_ol_level0 = len(re.findall(r'<ol>', list_text[start]))
+            num_ol_end_level0 = len(re.findall(r'</ol>', list_text[start]))
+            level = 0
+            ul_start_position = re.search(r'<ol>', list_text[start])
+            ul_start_position = ul_start_position.start()
+            # Find the position of the first </ol>
+            ul_end_position = re.search(r'</ol>', list_text[start])
+            ul_end_position = ul_end_position.start()
+            # Find the position of the first <oli>
+            li_start_position = re.search(r'<oli>', list_text[start])
+            li_start_position = li_start_position.start()
+            # Find the position of the first </oli>
+            li_end_position = re.search(r'</oli>', list_text[start])
+            li_end_position = li_end_position.start()
+            # Create the unordered list
+            ordered_list = []
+            ordered_list.append(list_text[start][:ul_start_position])
+            ordered_list.append("\n" + "\t"*(num_indentations+1) + "<ol>")
+            num_ol_old = num_ol_level0
+            # num_ol_end_old = num_ol_end_level0
+            for j, pos in enumerate(positions):
+                if pos >= start and pos <= end:
+                    # Get the number of <ol> and </ol> into list_text[start]
+                    num_ol = len(re.findall(r'<ol>', list_text[pos]))
+                    # num_ol_end = len(re.findall(r'</ol>', list_text[pos]))
+                    if num_ol > num_ol_old: 
+                        level += 1
+                        num_ol_old = num_ol
+                        ordered_list[-1] = ordered_list[-1][:-5]
+                        ordered_list.append("\n" + "\t"*(num_indentations+1+(level*2)) + "<ol>")
+                    if num_ol < num_ol_old: 
+                        level -= 1
+                        num_ol_old = num_ol
+                        ordered_list.append("\n" + "\t"*(num_indentations+1+((level+1)*2)) + "</ol>")
+                    li_start = re.search(r'<oli>', list_text[pos])
+                    li_start = li_start.start()
+                    ol_end = re.search(r'</ol>', list_text[pos])
+                    ol_end = ol_end.start()
+                    ordered_list.append("\n" + "\t"*(num_indentations+2+(level*2)) + "<li>" + list_text[pos][li_start+5:ol_end-6] + "</li>")
+                    list_text[pos] = ""
+            ordered_list.append("\n" + "\t"*(num_indentations+1) + "</ol>")
+            ordered_list.append("\n" + "\t"*(num_indentations) + "</p>")
+            list_text[start] = "".join(ordered_list)
         # Write the text in the file
         with open(file, 'w') as f:
             for line in list_text:
