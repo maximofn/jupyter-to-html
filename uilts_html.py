@@ -1,7 +1,5 @@
-from cgitb import text
-import re
-from turtle import position
 import format_text as ft
+import highlight_code as hc
 
 INDENTATION = 10
 INDENTATION_INDEX = 40
@@ -425,39 +423,22 @@ def print_code(indentation, code, output, file, type_code="output_code"):
     string = "\n"+("\t"*indentation)+'<div class=" highlight hl-python3">'
     file.write(string)
     indentation += 1
-    string = "\n"+("\t"*indentation)+f'<pre style="margin-left: {4*INDENTATION}px; line-height: 0%;">'
+    string = "\n"+("\t"*indentation)+f'<pre class="python" style="margin-left: {4*INDENTATION}px; line-height: 0%;font-family:monospace;">'
     file.write(string)
     indentation += 1
     for line in code:
-        # print(line)
-        string = "<p>"
-        # Get spaces before the code
-        spaces = re.search(r"^\s*", line)
-        if spaces:
-            spaces = spaces.group(0)
-            string += spaces
-        for w, word in enumerate(line.split(" ")):
-            if "\n" in word:
-                if len(word) > 1:
-                    word = word.replace("\n", "")
-                else:
-                    word = word.replace("\n", " ")
-            continue_line = False
-            if word == "":
-                continue_line = True
-            word = word.replace("<", "&lt;")
-            word = word.replace(">", "&gt;")
-            string = string+'<span class="n">'+word
-            if w == len(line.split(" "))-1:
-                string = string+'</span></p>'
-            else:
-                string = string+' </span>'
-        if continue_line:
-            continue
+        if line[-1] == "\n":
+            line = line[:-1]
+        highlight_line = hc.highlight_code(line)
+        if highlight_line[-1] == "\n":
+            highlight_line = highlight_line[:-1]
+        if highlight_line[-1] == "\n":
+            highlight_line = highlight_line[:-1]
+        string = "\n"+"<p>"+highlight_line+"</p>"
         file.write(string)
     indentation -= 1
-    # string = "\n"+("\t"*indentation)+'</pre>'
-    string = '</pre>'
+    string = "\n"+("\t"*indentation)+'</pre>'
+    # string = '</pre>'
     file.write(string)
     indentation -= 1
     string = "\n"+("\t"*indentation)+'</div>'
@@ -574,7 +555,7 @@ def print_index_body(indentation, headers, file):
     indentation += 1
     for header in headers[1:]:
         level, text = get_level_index(header)
-        text_clean, text_formated = ft.format_text(text)
+        text_clean, text_formated = ft.format_text(text, header=True)
         indentation = print_header_index(indentation, level, text_clean, text_formated, file, size=12)
     indentation -= 1
     string = "\n"+("\t"*indentation)+'</div>'
@@ -642,7 +623,7 @@ def print_content(indentation, name, cells, file):
         if cell['cell_type'] == 'markdown':
             if cell['source'][0].startswith('#'):
                 level, text = get_level_index(cell['source'][0])
-                text_clean, text_formated = ft.format_text(text)
+                text_clean, text_formated = ft.format_text(text, header=True)
                 indentation = print_header(indentation, level, text_clean, text_formated, file)
             else:
                 cell['source'] = find_markdown_code(cell['source'])
