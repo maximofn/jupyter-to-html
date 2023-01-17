@@ -24,13 +24,11 @@ def parse_arguments():
     if args.file:
         path, name, extension, _ = path_name_ext_from_file(args.file)
         if extension == '.ipynb':
-            print(f"\Convert {path}{name}{extension} to {name}.html")
+            print(f"\tConverting {path}{name}{extension} to {name}.html")
         else:
-            print(f"File {args.file} is not a Jupyter notebook")
-            sys.exit(1)
+            raise Exception(f"File {path}{name}{extension} is not a Jupyter notebook")
     else:
-        print('No file specified')
-        sys.exit(1)
+        raise Exception('No file specified')
     
     return parser.parse_args()
 
@@ -98,4 +96,4 @@ def main(file):
 
 if __name__ == '__main__':
     args = parse_arguments()
-    main()
+    main(args.file)
