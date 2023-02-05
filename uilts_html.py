@@ -585,7 +585,10 @@ def print_open_in_colab_button(indentation, name, html):
     string = "\n"+("\t"*indentation)+'<div class="text_cell_render border-box-sizing rendered_html">'
     html.write(string)
     indentation += 1
-    string = "\n"+("\t"*indentation)+f'<p style="margin-left: 0px;"><a href="https://colab.research.google.com/github/maximofn/portafolio/blob/main/posts/{name}.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>'
+    if name[-3] == "_":
+        string = "\n"+("\t"*indentation)+f'<p style="margin-left: 0px;"><a href="https://colab.research.google.com/github/maximofn/portafolio/blob/main/posts/notebooks_translated/{name}.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>'
+    else:
+        string = "\n"+("\t"*indentation)+f'<p style="margin-left: 0px;"><a href="https://colab.research.google.com/github/maximofn/portafolio/blob/main/posts/{name}.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>'
     html.write(string)
     indentation -= 1
     string = "\n"+("\t"*indentation)+'</div>'
