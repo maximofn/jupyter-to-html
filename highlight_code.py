@@ -116,6 +116,8 @@ def highlight_code(code):
     html_code = html_code.replace('<span class="bp">', '<span style="color: #7f6e38;">')
     # Replace <span class="ne"> by <span style="color: #7f6e38;">
     html_code = html_code.replace('<span class="ne">', '<span style="color: #7f6e38;">')
+    # Replace <span class="ch"> by <span style="color: #7f6e38;">
+    html_code = html_code.replace('<span class="ch">', '<span style="color: #7f6e38;">')
     # If <span class is in the code show one warning
     if '<span class' in html_code:
         # Locate the position of the first <span class
