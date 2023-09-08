@@ -639,7 +639,10 @@ def print_open_in_colab_button(indentation, name, html):
     string = "\n"+("\t"*indentation)+'<div class="text_cell_render border-box-sizing rendered_html">'
     html.write(string)
     indentation += 1
-    string = "\n"+("\t"*indentation)+f'<p style="margin-left: 0px;"><a href="https://colab.research.google.com/github/maximofn/portafolio/blob/main/posts/{name}.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>'
+    if name[-3] == "_":
+        string = "\n"+("\t"*indentation)+f'<p style="margin-left: 0px;"><a href="https://colab.research.google.com/github/maximofn/portafolio/blob/main/posts/notebooks_translated/{name}.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>'
+    else:
+        string = "\n"+("\t"*indentation)+f'<p style="margin-left: 0px;"><a href="https://colab.research.google.com/github/maximofn/portafolio/blob/main/posts/{name}.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a></p>'
     html.write(string)
     indentation -= 1
     string = "\n"+("\t"*indentation)+'</div>'
@@ -692,19 +695,22 @@ def print_content(indentation, name, cells, file):
                         margin_left = 0
                     indentation = print_text(indentation, text_formated, file, margin_left)
         elif cell['cell_type'] == 'code':
-            if len(cell['outputs']) == 0:
-                indentation = print_code(indentation, cell['source'], [], file, type_code="output_code")
+            if 'outputs' in cell.keys():
+                if len(cell['outputs']) == 0:
+                    indentation = print_code(indentation, cell['source'], [], file, type_code="output_code")
+                else:
+                    if cell['outputs'][-1]['output_type'] == 'stream':
+                        indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['text'], file, type_code="output_code")
+                    elif cell['outputs'][-1]['output_type'] == 'display_data':
+                        indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['data']['image/png'], file, type_code="display_data")
+                    elif cell['outputs'][-1]['output_type'] == 'execute_result':
+                        indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['data']['text/plain'], file, type_code="output_code")
+                    elif cell['outputs'][-1]['output_type'] == 'error':
+                        list_error_text = ft.pre_format_error_text(cell['outputs'][-1]['traceback'])
+                        list_error_text = ft.format_error_text(list_error_text)
+                        indentation = print_code(indentation, cell['source'], list_error_text, file, type_code="error_code")
             else:
-                if cell['outputs'][-1]['output_type'] == 'stream':
-                    indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['text'], file, type_code="output_code")
-                elif cell['outputs'][-1]['output_type'] == 'display_data':
-                    indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['data']['image/png'], file, type_code="display_data")
-                elif cell['outputs'][-1]['output_type'] == 'execute_result':
-                    indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['data']['text/plain'], file, type_code="output_code")
-                elif cell['outputs'][-1]['output_type'] == 'error':
-                    list_error_text = ft.pre_format_error_text(cell['outputs'][-1]['traceback'])
-                    list_error_text = ft.format_error_text(list_error_text)
-                    indentation = print_code(indentation, cell['source'], list_error_text, file, type_code="error_code")
+                indentation = print_code(indentation, cell['source'], [], file, type_code="input_code")
     indentation -= 1
     string = "\n"+("\t"*indentation)+'</div>'
     file.write(string)
