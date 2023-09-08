@@ -91,28 +91,31 @@ def first_paragraph(file):
     file.write("\n\t<!-- Loading mathjax macro --><!-- Load mathjax --><!-- MathJax configuration -->")
     file.write("\n<p>")
     file.write("\n<style>")
-    file.write("\n\t/* Estilos específicos para el índice y contenido */")
-    file.write("\n\t.container {")
-    file.write("\n\t\tdisplay: flex;")
-    file.write("\n\t\tjustify-content: space-between;")
-    file.write("\n\t\theight: 100vh; /* altura del viewport */")
-    file.write("\n\t}")
-    file.write("\n ")
-    file.write("\n\t.indice {")
-    file.write("\n\t\twidth: 25%; /* Ajusta según tus necesidades */")
-    file.write("\n\t\tpadding: 20px;")
-    file.write("\n\t\tborder-right: 1px solid #ccc;")
-    file.write("\n\t\tbox-sizing: border-box;")
-    file.write("\n\t\toverflow-y: auto; /* desplazamiento vertical cuando sea necesario */")
-    file.write("\n\t\tmax-height: calc(100vh - 40px); /* Ajustar según tus necesidades. Aquí estamos restando el doble del padding para mantener todo visible */")
-    file.write("\n\t}")
-    file.write("\n ")
-    file.write("\n\t.contenido {")
-    file.write("\n\t\twidth: 70%; /* Asegúrate de que la suma de .indice y .contenido no sea mayor que 100% */")
-    file.write("\n\t\tpadding: 20px;")
-    file.write("\n\t\tbox-sizing: border-box;")
-    file.write("\n\t\toverflow-y: auto; /* desplazamiento vertical cuando sea necesario */")
-    file.write("\n\t\tmax-height: calc(100vh - 40px); /* Ajustar según tus necesidades. Aquí estamos restando el doble del padding para mantener todo visible */")
+    file.write("\n\t/* Media query para pantallas grandes */")
+    file.write("\n\t@media screen and (min-width: 1000px) {")
+    file.write("\n\t\t.container {")
+    file.write("\n\t\t\tflex-wrap: nowrap;")
+    file.write("\n\t\t\tdisplay: flex;")
+    file.write("\n\t\t\tjustify-content: space-between;")
+    file.write("\n\t\t\theight: 100vh; /* altura del viewport */")
+    file.write("\n\t\t}")
+    file.write("\n\t\t")
+    file.write("\n\t\t.indice {")
+    file.write("\n\t\t\twidth: 25%; /* Ancho del índice en pantallas grandes */")
+    file.write("\n\t\t\tborder-right: 1px solid #ccc;")
+    file.write("\n\t\t\tmax-height: calc(100vh - 40px); /* Ajustar según tus necesidades. Aquí estamos restando el doble del padding para mantener todo visible */")
+    file.write("\n\t\t\tpadding: 20px;")
+    file.write("\n\t\t\tbox-sizing: border-box;")
+    file.write("\n\t\t\toverflow-y: auto; /* desplazamiento vertical cuando sea necesario */")
+    file.write("\n\t\t}")
+    file.write("\n\t\t")
+    file.write("\n\t\t.contenido {")
+    file.write("\n\t\t\twidth: 70%; /* Ancho del contenido en pantallas grandes */")
+    file.write("\n\t\t\tmax-height: calc(100vh - 40px); /* Ajustar según tus necesidades. Aquí estamos restando el doble del padding para mantener todo visible */")
+    file.write("\n\t\t\tpadding: 20px;")
+    file.write("\n\t\t\tbox-sizing: border-box;")
+    file.write("\n\t\t\toverflow-y: auto; /* desplazamiento vertical cuando sea necesario */")
+    file.write("\n\t\t}")
     file.write("\n\t}")
     file.write("\n</style>")
 
@@ -328,7 +331,7 @@ def print_header_index(indentation, header_level, text_clean, text_formated, fil
     file.write(string)
     indentation += 1
     if size is not None:
-        string = "\n"+("\t"*indentation)+f'<p style="margin-left: {(header_level-2)*INDENTATION_INDEX}px; font-size: {size}px; line-height: 0%">'+f'{text_formated}'+'</p>'
+        string = "\n"+("\t"*indentation)+f'<p style="margin-left: {(header_level-2)*INDENTATION_INDEX}px; font-size: {size}px; line-height: 1.5;">'+f'{text_formated}'+'</p>'
     else:
         string = "\n"+("\t"*indentation)+f'<p style="margin-left: {(header_level-2)*INDENTATION_INDEX}px">'+f'{text_formated}'+'</p>'
     file.write(string)
@@ -702,7 +705,12 @@ def print_content(indentation, name, cells, file):
                     if cell['outputs'][-1]['output_type'] == 'stream':
                         indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['text'], file, type_code="output_code")
                     elif cell['outputs'][-1]['output_type'] == 'display_data':
-                        indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['data']['image/png'], file, type_code="display_data")
+                        if 'image/png' in cell['outputs'][-1]['data'].keys():
+                            indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['data']['image/png'], file, type_code="display_data")
+                        elif 'text/plain' in cell['outputs'][-1]['data'].keys():
+                            indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['data']['text/plain'], file, type_code="output_code")
+                        else:
+                            indentation = print_code(indentation, cell['source'], [], file, type_code="output_code")
                     elif cell['outputs'][-1]['output_type'] == 'execute_result':
                         indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['data']['text/plain'], file, type_code="output_code")
                     elif cell['outputs'][-1]['output_type'] == 'error':
