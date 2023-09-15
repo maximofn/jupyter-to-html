@@ -54,11 +54,13 @@ def main(file):
     # Add the first part of the HTML file
     uh.first_paragraph(html)    # Write the first paragraph
     
-    # Add the first two divs
+    # Add the first three divs
     indentation = 0
     uh.open_div_notebook(indentation, html)
     indentation += 1
     uh.open_div_notebook_container(indentation, html)
+    indentation += 1
+    uh.open_div_indice(indentation, html)
     
     # Add the index head
     indentation += 1
@@ -68,12 +70,14 @@ def main(file):
     # Add the index body
     indentation = uh.print_index_body(indentation, headers, html)
     uh.print_blank_line(html)
+    indentation -= 1
+    uh.close_div_indice(indentation, html)
 
     # Add the content of the notebook
     indentation = uh.print_content(indentation, name, cells, html)
     uh.print_blank_line(html)
     
-    # Close the two first divs
+    # Close the three first divs
     indentation -= 1
     uh.close_div_notebook_container(indentation, html)
     indentation -= 1

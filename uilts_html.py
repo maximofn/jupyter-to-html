@@ -90,7 +90,34 @@ def first_paragraph(file):
     file.write("\n\t<!-- Custom stylesheet, it must be in the same directory as the html file -->")
     file.write("\n\t<!-- Loading mathjax macro --><!-- Load mathjax --><!-- MathJax configuration -->")
     file.write("\n<p>")
-    file.write("\n")
+    file.write("\n<style>")
+    file.write("\n\t/* Media query para pantallas grandes */")
+    file.write("\n\t@media screen and (min-width: 1000px) {")
+    file.write("\n\t\t.container {")
+    file.write("\n\t\t\tflex-wrap: nowrap;")
+    file.write("\n\t\t\tdisplay: flex;")
+    file.write("\n\t\t\tjustify-content: space-between;")
+    file.write("\n\t\t\theight: 100vh; /* altura del viewport */")
+    file.write("\n\t\t}")
+    file.write("\n\t\t")
+    file.write("\n\t\t.indice {")
+    file.write("\n\t\t\twidth: 25%; /* Ancho del índice en pantallas grandes */")
+    file.write("\n\t\t\tborder-right: 1px solid #ccc;")
+    file.write("\n\t\t\tmax-height: calc(100vh - 40px); /* Ajustar según tus necesidades. Aquí estamos restando el doble del padding para mantener todo visible */")
+    file.write("\n\t\t\tpadding: 20px;")
+    file.write("\n\t\t\tbox-sizing: border-box;")
+    file.write("\n\t\t\toverflow-y: auto; /* desplazamiento vertical cuando sea necesario */")
+    file.write("\n\t\t}")
+    file.write("\n\t\t")
+    file.write("\n\t\t.contenido {")
+    file.write("\n\t\t\twidth: 70%; /* Ancho del contenido en pantallas grandes */")
+    file.write("\n\t\t\tmax-height: calc(100vh - 40px); /* Ajustar según tus necesidades. Aquí estamos restando el doble del padding para mantener todo visible */")
+    file.write("\n\t\t\tpadding: 20px;")
+    file.write("\n\t\t\tbox-sizing: border-box;")
+    file.write("\n\t\t\toverflow-y: auto; /* desplazamiento vertical cuando sea necesario */")
+    file.write("\n\t\t}")
+    file.write("\n\t}")
+    file.write("\n</style>")
 
 def open_div_notebook(indentation, file):
     ###
@@ -146,6 +173,36 @@ def close_div_notebook_container(indentation, file):
     string = "\n"+("\t"*indentation)+'<!-- Close div notebook container -->'
     file.write(string)
     string = "\n"+("\t"*indentation)+'</div>'
+    file.write(string)
+
+def open_div_indice(indentation, file):
+    ###
+    # This function print the open of the third div
+    # Input:
+    #   Indentation: int
+    #   file: file
+    # Output:
+    #   None
+    ###
+    string = "\n"+("\t"*indentation)+'<!-- Open div indice -->'
+    file.write(string)
+    string = "\n"+("\t"*indentation)+'<div class="indice">'
+    file.write(string)
+
+def close_div_indice(indentation, file):
+    ###
+    # This function print the close of the third div
+    # Input:
+    #   Indentation: int
+    #   file: file
+    # Output:
+    #   None
+    ###
+    string = "\n"+("\t"*indentation)+'<!-- Close div indice -->'
+    file.write(string)
+    string = "\n"+("\t"*indentation)+'</div>'
+    file.write(string)
+    string = "\n "
     file.write(string)
 
 def print_index_head(indentation, text, file):
@@ -274,7 +331,7 @@ def print_header_index(indentation, header_level, text_clean, text_formated, fil
     file.write(string)
     indentation += 1
     if size is not None:
-        string = "\n"+("\t"*indentation)+f'<p style="margin-left: {(header_level-2)*INDENTATION_INDEX}px; font-size: {size}px; line-height: 0%">'+f'{text_formated}'+'</p>'
+        string = "\n"+("\t"*indentation)+f'<p style="margin-left: {(header_level-2)*INDENTATION_INDEX}px; font-size: {size}px; line-height: 1.5;">'+f'{text_formated}'+'</p>'
     else:
         string = "\n"+("\t"*indentation)+f'<p style="margin-left: {(header_level-2)*INDENTATION_INDEX}px">'+f'{text_formated}'+'</p>'
     file.write(string)
@@ -616,6 +673,9 @@ def print_content(indentation, name, cells, file):
     ###
     string = "\n"+("\t"*indentation)+'<!-- Content -->'
     file.write(string)
+    string = "\n"+("\t"*indentation)+'<div class="contenido">'
+    file.write(string)
+    # indentation += 1
     string = "\n"+("\t"*indentation)+'<div>'
     file.write(string)
     indentation += 1
@@ -649,6 +709,10 @@ def print_content(indentation, name, cells, file):
                             indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['data']['image/png'], file, type_code="display_data")
                         elif 'image/svg+xml' in cell['outputs'][-1]['data'].keys():
                             indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['data']['image/svg+xml'], file, type_code="display_data")
+                        elif 'text/plain' in cell['outputs'][-1]['data'].keys():
+                            indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['data']['text/plain'], file, type_code="output_code")
+                        else:
+                            indentation = print_code(indentation, cell['source'], [], file, type_code="output_code")
                     elif cell['outputs'][-1]['output_type'] == 'execute_result':
                         indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['data']['text/plain'], file, type_code="output_code")
                     elif cell['outputs'][-1]['output_type'] == 'error':
@@ -658,6 +722,11 @@ def print_content(indentation, name, cells, file):
             else:
                 indentation = print_code(indentation, cell['source'], [], file, type_code="input_code")
     indentation -= 1
+    string = "\n"+("\t"*indentation)+'</div>'
+    file.write(string)
+    indentation -= 1
+    string = "\n"+("\t"*indentation)+'<!-- Close class contenido -->'
+    file.write(string)
     string = "\n"+("\t"*indentation)+'</div>'
     file.write(string)
     print_blank_line(file)
