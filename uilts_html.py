@@ -645,7 +645,10 @@ def print_content(indentation, name, cells, file):
                     if cell['outputs'][-1]['output_type'] == 'stream':
                         indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['text'], file, type_code="output_code")
                     elif cell['outputs'][-1]['output_type'] == 'display_data':
-                        indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['data']['image/png'], file, type_code="display_data")
+                        if 'image/png' in cell['outputs'][-1]['data'].keys():
+                            indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['data']['image/png'], file, type_code="display_data")
+                        elif 'image/svg+xml' in cell['outputs'][-1]['data'].keys():
+                            indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['data']['image/svg+xml'], file, type_code="display_data")
                     elif cell['outputs'][-1]['output_type'] == 'execute_result':
                         indentation = print_code(indentation, cell['source'], cell['outputs'][-1]['data']['text/plain'], file, type_code="output_code")
                     elif cell['outputs'][-1]['output_type'] == 'error':
